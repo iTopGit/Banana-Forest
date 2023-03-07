@@ -1,0 +1,177 @@
+{% extends "base/base.html" %}
+{% block content %}
+<div class="container" id="profile_info_blog">
+    <div  class="row" >
+        <div id="profile_" class="col-md-3" >
+            <img class="tw-user-small rounded-circle" id="img_profile" src="{{ current_user.avatar_url }}" alt="">
+        </div>
+        <div class="col-md-5">
+            <p id="name_profile" style="color:whitesmoke;"> {{ current_user.name }} </p>
+            <p id="email_profile" style="color:whitesmoke;"> {{ current_user.email }} </p>
+        </div>
+        <div class="col-md-4">
+            <button class="edit-profile-button" id="edit_profile_btn">Edit profile</button>
+            <button class="edit-pass-button" id="edit_pass_btn">Edit password</button>
+        </div>
+    </div>
+</div>
+<div id="myFormName" class="form-popup">
+    <div class="wrapper_profile">
+        <form action="/lab11/profile" method="post" class="form-container">
+            <h2 class="title">Edit Profile</h2>
+            <input type="hidden" name="check_edit" id="check_edit" value="edit_name" required>
+            <div class="forminput">
+                <span class="icon">
+                <i class="fa-solid fa-address-card"></i>
+                </span>
+                <input type="text" name="name" value="{{current_user.name}}" required>
+                <label>Name</label>
+            </div>
+            <p id="errorMessage_mail" style="display: none; color: red;">Email is already taken.</p>
+            <div class="forminput">
+                <span class="icon">
+                <i class="fa-solid fa-envelope"></i>
+                </span>
+                <input type="email" name="email" value="{{current_user.email}}" required>
+                <label>Email</label>
+            </div>
+            <p id="errorMessage" style="display: none; color: red;">Incorrect password. Please try again.</p>
+            <div class="forminput">
+                <span class="icon">
+                <i class="fa-sharp fa-solid fa-key"></i>
+                </span>
+                <input type="password" name="password" id="password"  required>
+                <label>Password</label>
+            </div>
+            <div class="button_name">
+                <button type="submit" class="btn">Confirm</button>
+                <button type="button" class="btn" id="closeForm">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="myFormPass" class="form-pass-popup">
+    <div class="wrapper_profile">
+    <form action="/lab11/profile" method="post" class="form-container-pass">
+        <h2 class="title">Edit Password</h2>
+        <input type="hidden" name="check_edit" id="check_edit" value="edit_pass" required>
+        <p id="errorMessage_confirmpass" style="display: none; color: red;">Password do not match, Please try again.</p>
+        <div class="forminput">
+            <span class="icon">
+                <i class="fa-sharp fa-solid fa-key"></i>
+            </span>
+            <input type="password" name="new_password" value="" required>
+            <label>NewPassword</label>
+        </div>
+        <div class="forminput">
+            <span class="icon">
+                <i class="fa-sharp fa-solid fa-key"></i>
+            </span>
+            <input type="password" name="confirm_password" id="confirm_password" value="" required>
+            <label>ConfirmPassword</label>
+        </div>
+        <p id="errorMessage_oldpass" style="display: none; color: red;">Incorrect password, Please try again.</p>
+        <div class="forminput">
+            <span class="icon">
+            <i class="fa-sharp fa-solid fa-key"></i>
+            </span>
+            <input type="password" name="old_password" value="" required>
+            <label>OldPassword</label>
+        </div>
+        <div class="button_pass">
+            <button type="submit" class="btn">Confirm</button>
+            <button type="button" class="btn" id="closeFormpass">Cancel</button>
+        </div>
+    </form>
+</div>
+<script>
+    const openFormButton = document.getElementById("edit_profile_btn");
+    const closeFormButton = document.getElementById("closeForm");
+    const myForm = document.getElementById("myFormName");
+    const errorMessagePass = document.getElementById("errorMessage");
+    const errorMessageMail = document.getElementById("errorMessage_mail");
+
+    const openFormButtonPass = document.getElementById("edit_pass_btn");
+    const closeFormButtonPass = document.getElementById("closeFormpass");
+    const myFormPass = document.getElementById("myFormPass");
+    const errorMessageOldPass = document.getElementById("errorMessage_oldpass");
+    const errorMessageConfirmPass = document.getElementById("errorMessage_confirmpass");
+
+    openFormButton.addEventListener("click", () => {
+        myForm.style.display = "block";
+    });
+
+    closeFormButton.addEventListener("click", () => {
+        myForm.style.display = "none";
+        errorMessagePass.style.display = "none";
+        errorMessageMail.style.display = "none";
+    });
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            if ("{{ messages[0] }}" === "Incorrect password.") {
+                myForm.style.display = "block";
+                errorMessagePass.style.display = "block";
+                closeFormButton.removeEventListener("click", closeFormHandler);
+                closeFormButton.addEventListener("click", function(event) {
+                    event.stopPropagation();
+                    errorMessagePass.style.display = "none";
+                    errorMessageMail.style.display = "none";
+                });
+            } else if ("{{ messages[0] }}" === "Email is already taken."){
+                myForm.style.display = "block";
+                errorMessageMail.style.display = "block";
+            } else {
+                myForm.style.display = "none";
+            }
+        {% endif %}
+    {% endwith %}
+
+    // handler function for closing the popup
+    function closeFormHandler(event) {
+        myForm.style.display = "none";
+        errorMessagePass.style.display = "none";
+        errorMessageMail.style.display = "none";
+    }
+
+    // add event listener to close button
+    closeFormButton.addEventListener("click", closeFormHandler);
+
+    openFormButtonPass.addEventListener("click", () => {
+        myFormPass.style.display = "block";
+    });
+
+    closeFormButtonPass.addEventListener("click", () => {
+        myFormPass.style.display = "none";
+        errorMessageOldPass.style.display = "none";
+        errorMessageConfirmPass.style.display = "none";
+    });
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            if ("{{ messages[0] }}" === "Incorrect password, Please try again") {
+                myFormPass.style.display = "block";
+                errorMessageOldPass.style.display = "block";
+                closeFormButtonPass.removeEventListener("click", closeFormPassHandler);
+                closeFormButtonPass.addEventListener("click", function(event) {
+                    event.stopPropagation();
+                    errorMessageOldPass.style.display = "none";
+                    errorMessageConfirmPass.style.display = "none";
+                });
+            } else if ("{{ messages[0] }}" === "Passwords do not match, Please try again"){
+                myFormPass.style.display = "block";
+                errorMessageConfirmPass.style.display = "block";
+            } else {
+                myFormPass.style.display = "none";
+            }
+        {% endif %}
+    {% endwith %}
+    
+    // handler function for closing the popup
+    function closeFormPassHandler(event) {
+        myForm.style.display = "none";
+        errorMessageOldPass.style.display = "none";
+        errorMessageConfirmPass.style.display = "none";
+    }
+    closeFormButtonPass.addEventListener("click", closeFormPassHandler);
+</script>
+{% endblock %}
