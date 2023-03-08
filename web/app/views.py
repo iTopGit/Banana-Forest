@@ -286,3 +286,45 @@ def google_auth():
         user = AuthUser.query.filter_by(email=email).first()
     login_user(user)
     return redirect('/')
+
+@app.route('/facebook/')
+def facebook():
+    oauth.register(
+        name='facebook',
+        client_id=app.config['FACEBOOK_CLIENT_ID'],
+        client_secret=app.config['FACEBOOK_CLIENT_SECRET'],
+        access_token_url='https://graph.facebook.com/oauth/access_token',
+        access_token_params=None,
+        authorize_url='https://www.facebook.com/dialog/oauth',
+        authorize_params=None,
+        api_base_url='https://graph.facebook.com/',
+        client_kwargs={'scope': 'email'},
+    )
+    redirect_uri = url_for('facebook_auth', _external=True)
+    return oauth.facebook.authorize_redirect(redirect_uri)
+ 
+@app.route('/facebook/auth/')
+def facebook_auth():
+    token = oauth.facebook.authorize_access_token()
+    app.logger.debug(token)
+    resp = oauth.facebook.get(
+        'https://graph.facebook.com/me?fields=id,name,email,picture{url}')
+    profile = resp.json()
+    email = profile['email']
+    
+    user = AuthUser.query.filter_by(email=email).first()
+    if not user:
+        name = profile['name']
+        random_pass_len = 8
+        password = ''.join(secrets.choice(string.ascii_uppercase + string.digits)
+                          for i in range(random_pass_len))
+        picture = profile['picture']['data']['url']
+        new_user = AuthUser(email=email, name=name,
+                           password=generate_password_hash(
+                               password, method='sha256'),
+                           avatar_url=picture)
+        db.session.add(new_user)
+        db.session.commit()
+        user = AuthUser.query.filter_by(email=email).first()
+    login_user(user)
+    return redirect('/')

@@ -11,7 +11,7 @@ class AuthUser(db.Model, UserMixin):
     email = db.Column(db.String(100), unique=True)
     name = db.Column(db.String(1000))
     password = db.Column(db.String(100))
-    avatar_url = db.Column(db.String(100))
+    avatar_url = db.Column(db.String(500))
 
 
     def __init__(self, email, name, password, avatar_url):
