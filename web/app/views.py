@@ -36,11 +36,11 @@ def index():
 def draw_page():
     if request.method == "POST":
         pic = request.files['pic']
-        path = './static/img/user-blog/'
+        path = './app/static/img/user-blog/'
         
         if not pic:
             return 'No pic uploaded!', 400
-
+        
         filename = secure_filename(pic.filename)
         mimetype = pic.mimetype
         if not filename or not mimetype:

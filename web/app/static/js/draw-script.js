@@ -1,70 +1,92 @@
-const canvas = document.getElementById("canvas")
-const body = document.querySelector('body');
-canvas.height = window.innerHeight
-canvas.width = window.innerWidth
-var theColor = '';
+const canvas = document.getElementById("canvas");
+const body = document.querySelector("body");
+canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
+var theColor = "";
 var lineW = 5;
 let points = [];
 let brushRadius = 5;
-let prevX = null
-let prevY = null
-let draw = false
+let prevX = null;
+let prevY = null;
+let draw = false;
 let undoList = [];
 let redoList = [];
-
 
 body.style.backgroundColor = "#FFFFFF";
 var theInput = document.getElementById("favcolor");
 
-theInput.addEventListener("input", function(){
-  theColor = theInput.value;
-  console.log("the color" + theColor)
-  ctx.fillStyle = theColor;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  // body.style.backgroundColor = theColor;
-}, false);
+theInput.addEventListener(
+  "input",
+  function () {
+    theColor = theInput.value;
+    console.log("the color" + theColor);
+    ctx.fillStyle = theColor;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // body.style.backgroundColor = theColor;
+  },
+  false
+);
 
-const ctx = canvas.getContext("2d")
+const ctx = canvas.getContext("2d");
 ctx.lineWidth = lineW;
-ctx.lineCap = 'round';
+ctx.lineCap = "round";
 
-document.getElementById("ageInputId").oninput = function() {
-    draw = null
-    lineW = document.getElementById("ageInputId").value;
-    document.getElementById("ageOutputId").innerHTML = lineW;
-    ctx.lineWidth = lineW;
-};  
+document.getElementById("ageInputId").oninput = function () {
+  draw = null;
+  lineW = document.getElementById("ageInputId").value;
+  document.getElementById("ageOutputId").innerHTML = lineW;
+  ctx.lineWidth = lineW;
+};
 
-let clrs = document.querySelectorAll(".clr")
-clrs = Array.from(clrs)
-clrs.forEach(clr => {
-    clr.addEventListener("click", () => {
-        ctx.strokeStyle = clr.dataset.clr
-    })
-})
+let clrs = document.querySelectorAll(".clr");
+clrs = Array.from(clrs);
+clrs.forEach((clr) => {
+  clr.addEventListener("click", () => {
+    ctx.strokeStyle = clr.dataset.clr;
+  });
+});
 
-let clearBtn = document.querySelector(".clear")
+let clearBtn = document.querySelector(".clear");
 clearBtn.addEventListener("click", () => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
-})
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+});
 
-let saveBtn = document.querySelector(".save")
+let saveBtn = document.querySelector(".save");
 saveBtn.addEventListener("click", () => {
-    let data = canvas.toDataURL("imag/png")
-    let a = document.createElement("a")
-    a.href = data
-    a.download = "sketch.png"
-    a.click()
-})
+  let data = canvas.toDataURL("imag/png");
+  let a = document.createElement("a");
+  a.href = data;
+  a.download = "sketch.png";
+  a.click();
+});
 
-let doneBtn = document.querySelector(".done")
+let doneBtn = document.querySelector(".done");
 doneBtn.addEventListener("click", () => {
-  let data = canvas.toDataURL("imag/png")
-  let img = document.getElementById("img")
-  img.src = data
-  modal.style.display = "block";
-})
+  let dataUrl = canvas.toDataURL("image/png");
+  let img = document.getElementById("img");
+  img.src = dataUrl;
 
+  let fileName = "image.png";
+  let mimeType = "image/png";
+
+  let blob = dataURItoBlob(dataUrl);
+  let file = new File([blob], fileName, {type: mimeType});
+
+  let fileInput = document.getElementById("img-input");
+  fileInput.files[0] = file;
+
+});
+
+function dataURItoBlob(dataURI) {
+  let byteString = atob(dataURI.split(",")[1]);
+  let mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+  let ab = new ArrayBuffer(byteString.length);
+  let ia = new Uint8Array(ab);
+  for (let i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+  return new Blob([ab], { type: mimeString });
+}
 
 canvas.addEventListener("mousedown", (e) => {
   saveState();
@@ -76,7 +98,6 @@ canvas.addEventListener("mousedown", (e) => {
   prevX = (e.clientX - rect.left) * scaleX; // Convert the X coordinate to canvas coordinate
   prevY = (e.clientY - rect.top) * scaleY; // Convert the Y coordinate to canvas coordinate
 });
-
 
 canvas.addEventListener("mouseup", (e) => {
   prevX = null;
@@ -100,7 +121,7 @@ canvas.addEventListener("mousemove", (e) => {
   ctx.moveTo(prevX, prevY);
   ctx.lineTo(currentX, currentY);
   ctx.stroke();
-  
+
   // Smooth the path
   let midX = (prevX + currentX) / 2;
   let midY = (prevY + currentY) / 2;
@@ -120,39 +141,38 @@ var btn = document.getElementById("done");
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
 
-// When the user clicks the button, open the modal 
-btn.onclick = function() {
-  let data = canvas.toDataURL("imag/png")
-  let img = document.getElementById("img")
-  img.src = data
+// When the user clicks the button, open the modal
+btn.onclick = function () {
+  let data = canvas.toDataURL("imag/png");
+  let img = document.getElementById("img");
+  img.src = data;
   modal.style.display = "block";
-}
+};
 
 // When the user clicks on <span> (x), close the modal
-span.onclick = function() {
+span.onclick = function () {
   modal.style.display = "none";
-}
+};
 
 // When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
+window.onclick = function (event) {
   if (event.target == modal) {
     modal.style.display = "none";
-    
   }
-}
+};
 
 let undoStack = [];
 let redoStack = [];
 
 document.addEventListener("keydown", (e) => {
-    // Check for Ctrl+Z (Undo)
-    if (e.ctrlKey && e.key === "z") {
-        undo();
-    }
-    // Check for Ctrl+Y (Redo)
-    else if (e.ctrlKey && e.key === "y") {
-        redo();
-    }
+  // Check for Ctrl+Z (Undo)
+  if (e.ctrlKey && e.key === "z") {
+    undo();
+  }
+  // Check for Ctrl+Y (Redo)
+  else if (e.ctrlKey && e.key === "y") {
+    redo();
+  }
 });
 
 function undo() {
@@ -162,7 +182,17 @@ function undo() {
     undoImage.src = undoList.pop();
     undoImage.onload = function () {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(undoImage, 0, 0, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
+      ctx.drawImage(
+        undoImage,
+        0,
+        0,
+        canvas.width,
+        canvas.height,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
     };
   }
 }
@@ -174,7 +204,17 @@ function redo() {
     redoImage.src = redoList.pop();
     redoImage.onload = function () {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(redoImage, 0, 0, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
+      ctx.drawImage(
+        redoImage,
+        0,
+        0,
+        canvas.width,
+        canvas.height,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
     };
   }
 }
@@ -184,62 +224,62 @@ function saveState() {
 }
 
 function clearCanvas() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 function redrawCanvas(state) {
   ctx.putImageData(state, 0, 0);
 }
 
-let linePoints = []
+let linePoints = [];
 
 function drawSmoothLine() {
   if (points.length < 3) {
     return;
   }
-  
-  let curveSegments = []
-  
+
+  let curveSegments = [];
+
   for (let i = 1; i < points.length - 1; i++) {
-    let x0 = points[i-1].x
-    let y0 = points[i-1].y
-    let x1 = points[i].x
-    let y1 = points[i].y
-    let x2 = points[i+1].x
-    let y2 = points[i+1].y
-    
-    let xc1 = (x0 + x1) / 2
-    let yc1 = (y0 + y1) / 2
-    let xc2 = (x1 + x2) / 2
-    let yc2 = (y1 + y2) / 2
-    
-    let len1 = Math.sqrt((x1-x0)*(x1-x0) + (y1-y0)*(y1-y0))
-    let len2 = Math.sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1))
-    
-    let k = len1 / (len1 + len2)
-    
-    let xm = xc1 + (xc2 - xc1) * k
-    let ym = yc1 + (yc2 - yc1) * k
-    
+    let x0 = points[i - 1].x;
+    let y0 = points[i - 1].y;
+    let x1 = points[i].x;
+    let y1 = points[i].y;
+    let x2 = points[i + 1].x;
+    let y2 = points[i + 1].y;
+
+    let xc1 = (x0 + x1) / 2;
+    let yc1 = (y0 + y1) / 2;
+    let xc2 = (x1 + x2) / 2;
+    let yc2 = (y1 + y2) / 2;
+
+    let len1 = Math.sqrt((x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0));
+    let len2 = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+
+    let k = len1 / (len1 + len2);
+
+    let xm = xc1 + (xc2 - xc1) * k;
+    let ym = yc1 + (yc2 - yc1) * k;
+
     curveSegments.push({
       x0: x1,
       y0: y1,
       x1: xm,
       y1: ym,
       x2: x2,
-      y2: y2
-    })
+      y2: y2,
+    });
   }
-  
-  ctx.beginPath()
-  ctx.moveTo(points[0].x, points[0].y)
-  
+
+  ctx.beginPath();
+  ctx.moveTo(points[0].x, points[0].y);
+
   for (let i = 0; i < curveSegments.length; i++) {
-    let seg = curveSegments[i]
-    ctx.quadraticCurveTo(seg.x1, seg.y1, seg.x2, seg.y2)
+    let seg = curveSegments[i];
+    ctx.quadraticCurveTo(seg.x1, seg.y1, seg.x2, seg.y2);
   }
-  
-  ctx.stroke()
+
+  ctx.stroke();
 }
 
 function addPoint(x, y, dragging) {
@@ -247,38 +287,46 @@ function addPoint(x, y, dragging) {
 }
 
 function onMouseDown(e) {
-  linePoints = []
-  addPoint(e.clientX, e.clientY)
-  canvas.addEventListener("mousemove", onMouseMove)
+  linePoints = [];
+  addPoint(e.clientX, e.clientY);
+  canvas.addEventListener("mousemove", onMouseMove);
 }
 
 function onMouseMove(e) {
-  addPoint(e.clientX, e.clientY)
+  addPoint(e.clientX, e.clientY);
 }
 
 function onMouseUp() {
-  if(draw){
-    draw = false
-    saveState()
+  if (draw) {
+    draw = false;
+    saveState();
   }
-  prevX = null
-  prevY = null
+  prevX = null;
+  prevY = null;
 }
 
 function getControlPoints(p0, p1, p2, t) {
   let d01 = Math.sqrt(Math.pow(p1.x - p0.x, 2) + Math.pow(p1.y - p0.y, 2));
   let d12 = Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
-  let fa = t * d01 / (d01 + d12);
+  let fa = (t * d01) / (d01 + d12);
   let fb = t - fa;
   let p1x = p1.x + fa * (p0.x - p2.x);
   let p1y = p1.y + fa * (p0.y - p2.y);
   let p2x = p1.x - fb * (p0.x - p2.x);
   let p2y = p1.y - fb * (p0.y - p2.y);
-  return [{ x: p1x, y: p1y }, { x: p2x, y: p2y }];
+  return [
+    { x: p1x, y: p1y },
+    { x: p2x, y: p2y },
+  ];
 }
 
 function smoothCurveBetween(p1, p2) {
-  let controlPoints = getControlPoints(points[p1], points[p1 + 1], points[p2], 0.6);
+  let controlPoints = getControlPoints(
+    points[p1],
+    points[p1 + 1],
+    points[p2],
+    0.6
+  );
   let p1x = points[p1].x;
   let p1y = points[p1].y;
   let p2x = points[p1 + 1].x;
@@ -294,8 +342,8 @@ function smoothDraw() {
   if (!draw) {
     return;
   }
-  
-  drawSmoothLine()
-  
-  requestAnimationFrame(smoothDraw)
+
+  drawSmoothLine();
+
+  requestAnimationFrame(smoothDraw);
 }

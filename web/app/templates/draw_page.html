@@ -59,14 +59,12 @@
     </div>
   </nav>
   <div>
-    <!-- <span class="canvas-container">
+    <span class="canvas-container">
       <canvas id="canvas"></canvas>
-    </span> -->
+    </span>
   </div>
 
-
-
-  <!-- <div class="nav">
+  <div class="nav">
     <div class="clr" data-clr="black"></div>
     <div class="clr" data-clr="red"></div>
     <div class="clr" data-clr="orange"></div>
@@ -84,27 +82,18 @@
     <output id="ageOutputId">5</output>
     <div class="emoji">🎨</div>
   </div>
+
   <div id="myModal" class="modal">
     <!-- Modal content -->
     <div class="modal-content">
       <span class="close">&times;</span>
       <img id="img" style="border-width:thin;border-style:solid;border-color:Black;"></img>
-      <input type="file" name="pic" />
-      <p>Some text in the Modal..</p>
+      <form enctype="multipart/form-data" method="POST">
+        <input id = "img-input" type="file" name="pic" />
+        <input type="submit" value="Upload a file" />
+      </form>
     </div>
   </div>
-</body>
-<div id="myModal" class="modal">
-  <!-- Modal content -->
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <img id="img" style="border-width:thin;border-style:solid;border-color:Black;"></img>
-    <form enctype="multipart/form-data" method="POST">
-      <input type="file" name="pic" />
-      <input type="submit" value="Upload a file" />
-    </form>
-  </div>
-</div>
 </body>
 
 </html>
