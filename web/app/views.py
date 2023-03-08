@@ -13,6 +13,7 @@ from app import oauth
 from app import app
 from app import db
 from app import login_manager
+from PIL import Image
 
 from app.models.image import Img
 from app.models.blogentry import BlogEntry
@@ -35,6 +36,8 @@ def index():
 def draw_page():
     if request.method == "POST":
         pic = request.files['pic']
+        path = './static/img/user-blog/'
+        
         if not pic:
             return 'No pic uploaded!', 400
 
@@ -42,10 +45,10 @@ def draw_page():
         mimetype = pic.mimetype
         if not filename or not mimetype:
             return 'Bad upload!', 400
-        img = Img(img=pic.read(), name=filename, mimetype=mimetype)
-        db.session.add(img)
-        db.session.commit()
-
+        image = Image.open(pic)
+        # Save the image in the specified path
+        image.save(path + filename)
+        
         return 'Img Uploaded!', 200
     return render_template('draw_page.html')
 
