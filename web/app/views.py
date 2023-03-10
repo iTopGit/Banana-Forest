@@ -53,6 +53,8 @@ def draw_page():
     return render_template('draw_page.html')
 
 
+
+
 @app.route('/db')
 def db_connection():
     try:
