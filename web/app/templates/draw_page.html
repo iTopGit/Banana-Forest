@@ -19,14 +19,12 @@
 
 </head>
 
-<body>
-  <nav class="navbar navbar-expand-md navbar-light bg-primary">
+<body class="vh-100">
+
+  <nav class="navbar navbar-expand">
     <div class="container-fluid">
       <div class="navbar-nav">
-        <a class="nav-item nav-link" href="#"><span class="oi oi-home"></span> Home</a>
-        <a class="nav-item nav-link" href="#"><span class="oi oi-bolt"></span> Moments</a>
-        <a class="nav-item nav-link" href="#"><span class="oi oi-bell"></span> Notifications</a>
-        <a class="nav-item nav-link" href="#"><span class="oi oi-envelope-open"></span> Messages</a>
+        <a class="nav-item nav-link" href="http://localhost:56733"><span class="oi oi-home"></span><span class="nav-text">Home</span></a>
       </div>
       <div>
         <img class="tw-user-small rounded-circle" src="static/img/tweeterUserSmall.jpg" width="40"> &nbsp;
@@ -35,75 +33,84 @@
   </nav>
 
   <div class="container-fluid display-container">
-    <div class="row display-container">
-      <div class="col-2"></div>
-      <div class="col-8 align-middle mt-4" id="canvas-container">
-          <canvas id="canvas"></canvas>
+    <div class="row">
+      <div class="col-2 p-5">
+        <div class="container toolsbar py-2">
+          <div class="row py-1 justify-content-center">
+            <div class="col-2 m-1 clr clr-black" data-clr="black"></div>
+          </div>
+          <div class="row py-1 justify-content-center">
+            <div class="col-2 m-1 clr clr-red" data-clr="red"></div>
+          </div>
+          <div class="row py-1 justify-content-center">
+            <div class="col-2 m-1 clr clr-orange" data-clr="orange"></div>
+          </div>
+          <div class="row py-1 justify-content-center">
+            <div class="col-2 m-1 clr clr-blue" data-clr="blue"></div>
+          </div>
+          <div class="row py-1 justify-content-center">
+            <div class="col-2 m-1 clr clr-purple" data-clr="purple"></div>
+          </div>
+          <div class="row py-1 justify-content-center">
+            <div class="col-2 m-1 clr clr-yellowgreen" data-clr="yellowgreen"></div>
+          </div>
+          <div class="row py-1 justify-content-center">
+            <div class="col-2 m-1 clr clr-yellow" data-clr="yellow"></div>
+          </div>
+          <div class="row py-1 justify-content-center">
+            <div class="col-2 m-1 clr clr-white" data-clr="white"></div>
+          </div>
+        </div>
+        <div class="container brushbar py-1 mt-3">
+          <div class="row p-2 justify-content-center">
+            <input type="range" name="ageInputName" class="form-range pl-1 px-1" id="ageInputId" value="5" min="1" max="10"
+              oninput="ageOutputId.value = ageInputId.value">
+          </div>
+          <div class="row justify-content-center">
+            <output id="ageOutputId" class="text-center pb-1" style="font-weight: 900; color: #8B4513;">5</output>
+          </div>
+          
+        </div>
+
       </div>
-      <div class="col-2"></div>
+      <div class="col-8 p-5" id="canvas-container">
+        <canvas id="canvas"></canvas>
+      </div>
+      <div class="col-2 p-5">
+        <div class="container bgcontrol mb-5">
+          <div class="row p-2 py-4 justify-content-center">
+            <input type="color" class="form-control form-control-color" id="favcolor" value="#FFFFFF">
+          </div>
+        </div>
+
+        <div class="container controlbar py-2 mt-5">
+          <div class="row p-2 py-2 justify-content-center">
+            <button class="btn clear">Clear</button>
+          </div>
+          <div class="row p-2 py-2 justify-content-center">
+            <button class="btn save">Save</button>
+          </div>
+          <div class="row p-2 py-2 justify-content-center">
+            <button class="btn done" id="done">Done</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="container toolsbar">
-    <div class="row p-2 pt-1 pb-1 justify-content-center">
-      <div class="col-2 clr clr-black" data-clr="black"></div>
-    </div>
-    <div class="row p-2 pt-1 pb-1 justify-content-center">
-      <div class="col-2 clr clr-red" data-clr="red"></div>
-    </div>
-    <div class="row p-2 pt-1 pb-1 justify-content-center">
-      <div class="col-2 clr clr-orange" data-clr="orange"></div>
-    </div>
-    <div class="row p-2 pt-1 pb-1 justify-content-center">
-      <div class="col-2 clr clr-blue" data-clr="blue"></div>
-    </div>
-    <div class="row p-2 pt-1 pb-1 justify-content-center">
-      <div class="col-2 clr clr-purple" data-clr="purple"></div>
-    </div>
-    <div class="row p-2 pt-1 pb-1 justify-content-center">
-      <div class="col-2 clr clr-yellowgreen" data-clr="yellowgreen"></div>
-    </div>
-    <div class="row p-2 pt-1 pb-1 justify-content-center">
-      <div class="col-2 clr clr-yellow" data-clr="yellow"></div>
-    </div>
-    <div class="row p-2 pt-1 pb-1 justify-content-center">
-      <div class="col-2 clr clr-white" data-clr="white"></div>
-    </div>
 
-    <div class="row p-2 pt-1 pb-1 justify-content-center">
-      <button class="btn btn-primary clear">Clear</button>
-    </div>
-    <div class="row p-2 pt-1 pb-1 justify-content-center">
-      <button class="btn btn-primary save">Save</button>
-    </div>
-    <div class="row p-2 pt-1 pb-1 justify-content-center">
-      <button class="btn btn-primary done" id="done">Done</button>
-    </div>
-    <div class="row p-2 pt-1 pb-1 justify-content-center">
-      <input type="color" id="favcolor" value="#FFFFFF">
-    </div>
-    <div class="row p-2 pt-1 pb-1 justify-content-center">
 
-      <input type="range" name="ageInputName" class="form-range" id="ageInputId" value="5" min="1" max="10"
-        oninput="ageOutputId.value = ageInputId.value">
 
-    </div>
-    <div class="row p-2 pt-1 pb-1 justify-content-center">
-      <output id="ageOutputId" class="text-center">5</output>
-    </div>
-    <!-- <div class="emoji">🎨</div> -->
-  </div>
-
-  <div id="myModal" class="modal">
-    <!-- Modal content -->
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <img id="img" style="border-width:thin;border-style:solid;border-color:Black;"></img>
-      <input type="file" name="pic" />
-      <p>Some text in the Modal..</p>
-    </div>
-  </div>
 </body>
+<div id="myModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <img id="img" style="border-width:thin;border-style:solid;border-color:Black;"></img>
+    <input type="file" name="pic" />
+    <p>Some text in the Modal..</p>
+  </div>
+</div>
 <div id="myModal" class="modal">
   <!-- Modal content -->
   <div class="modal-content">

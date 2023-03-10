@@ -1,7 +1,12 @@
-const canvas = document.getElementById("canvas");
 const body = document.querySelector("body");
-canvas.height = window.innerHeight;
-canvas.width = window.innerWidth;
+
+var res = 9/16;
+var canvasContainer = document.getElementById("canvas-container");
+const canvas = document.getElementById("canvas")
+canvas.width = canvasContainer.offsetWidth*0.9;
+canvas.height = canvas.width*res;
+
+
 var theColor = "";
 var lineW = 5;
 let points = [];
@@ -12,7 +17,7 @@ let draw = false;
 let undoList = [];
 let redoList = [];
 
-canvas.style.backgroundColor = "#FFFFFF";
+canvas.style.backgroundColor = "#ADFF2F";
 var theInput = document.getElementById("favcolor");
 
 theInput.addEventListener(
