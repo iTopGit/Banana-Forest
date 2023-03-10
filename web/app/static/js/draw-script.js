@@ -12,7 +12,7 @@ let draw = false;
 let undoList = [];
 let redoList = [];
 
-body.style.backgroundColor = "#FFFFFF";
+canvas.style.backgroundColor = "#FFFFFF";
 var theInput = document.getElementById("favcolor");
 
 theInput.addEventListener(
