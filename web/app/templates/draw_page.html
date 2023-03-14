@@ -101,19 +101,21 @@
 
 
 
-</body>
 <div id="myModal" class="modal">
   <!-- Modal content -->
   <div class="modal-content">
     <span class="close">&times;</span>
     <img id="img" style="border-width:thin;border-style:solid;border-color:Black;"></img>
-    <input type="file" name="pic" />
-    <p>Some text in the Modal..</p>
+    <form enctype="multipart/form-data" method="POST">
+      <input id="img-input" type="text" name="pic" />
+      <input type="submit" value="Upload a file" />
+    </form>
+    <button class="btn btn-primary save">Save</button>
   </div>
 </div>
-<div id="myModal" class="modal">
+<!--<div id="myModal" class="modal">
   <!-- Modal content -->
-  <div class="modal-content">
+  <!--<div class="modal-content">
     <span class="close">&times;</span>
     <img id="img" style="border-width:thin;border-style:solid;border-color:Black;"></img>
     <form enctype="multipart/form-data" method="POST">
@@ -122,6 +124,6 @@
       <button class="btn btn-primary save">Save</button>
     </form>
   </div>
-</div>
-
+</div>-->
+</body>
 </html>

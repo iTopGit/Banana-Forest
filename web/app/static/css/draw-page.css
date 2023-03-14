@@ -6,11 +6,11 @@
 }
 
 body {
-  background: linear-gradient(to top, #8B4513, #006400);
+  background: linear-gradient(to top, #8b4513, #006400);
 }
 
 .navbar {
-  background-color: #228B22;
+  background-color: #228b22;
   border-bottom: 5px solid yellow;
 }
 
@@ -25,7 +25,7 @@ body {
 
 canvas {
   display: flex;
-  border: 5px solid #8B4513;
+  border: 5px solid #8b4513;
   max-width: 1280px;
   max-height: 720px;
 }
@@ -33,35 +33,35 @@ canvas {
 .toolsbar {
   width: fit-content;
   transition: opacity 0.5s;
-  background: linear-gradient(to right, #FFFF00, #9ACD32);
+  background: linear-gradient(to right, #ffff00, #9acd32);
   border-radius: 10px;
-  border: 3px solid #8B4513;
+  border: 3px solid #8b4513;
 }
 
 .brushbar {
   width: fit-content;
   height: auto;
   transition: opacity 0.5s;
-  background: linear-gradient(to right, #FFFF00, #9ACD32);
+  background: linear-gradient(to right, #ffff00, #9acd32);
   border-radius: 10px;
-  border: 3px solid #8B4513;
+  border: 3px solid #8b4513;
 }
 
 .bgcontrol {
   width: 100px;
   height: auto;
   transition: opacity 0.5s;
-  background: linear-gradient(to right, #FFFF00, #9ACD32);
+  background: linear-gradient(to right, #ffff00, #9acd32);
   border-radius: 10px;
-  border: 3px solid #8B4513;
+  border: 3px solid #8b4513;
 }
 .controlbar {
   align-items: center;
   justify-content: center;
   transition: opacity 0.5s;
-  background: linear-gradient(to right, #FFFF00, #9ACD32);
+  background: linear-gradient(to right, #ffff00, #9acd32);
   border-radius: 10px;
-  border: 3px solid #8B4513;
+  border: 3px solid #8b4513;
 }
 
 .nav:hover {
@@ -78,7 +78,7 @@ buttton:hover {
   width: 35px;
   background-color: pink;
   border-radius: 50%;
-  border: 3px solid #8B4513;
+  border: 3px solid #8b4513;
   transition: transform 0.5s;
 }
 
@@ -120,9 +120,15 @@ buttton:hover {
 
 .btn {
   background-color: yellow;
-  border: 3px solid #8B4513;
+  border: 3px solid #8b4513;
   font-weight: 900;
-  color: #8B4513;
+  color: #8b4513;
+}
+
+#img {
+  width: 50%;
+  height: 50%;
+  margin: auto;
 }
 /* button {
   border: none;
@@ -221,7 +227,6 @@ buttton:hover {
 .btn-primary.show {
   transform: translateX(0%);
 } */
-
 
 /* #canvas {
     animation: color-loop 20s linear infinite;

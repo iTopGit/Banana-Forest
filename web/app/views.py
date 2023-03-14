@@ -1,5 +1,7 @@
 import secrets
 import string
+import base64
+import datetime
 
 from flask import (jsonify, render_template,
                    request, url_for, flash, redirect)
@@ -32,27 +34,35 @@ def index():
     return render_template('base/index.html')
 
 
-@app.route('/draw', methods=["POST","GET"])
+@app.route('/draw', methods=["POST", "GET"])
+@login_required
 def draw_page():
     if request.method == "POST":
-        pic = request.files['pic']
+        result = request.form.to_dict()
+        app.logger.debug(str(result))
         path = './app/static/img/user-blog/'
-        
-        if not pic:
-            return 'No pic uploaded!', 400
-        
-        filename = secure_filename(pic.filename)
-        mimetype = pic.mimetype
-        if not filename or not mimetype:
-            return 'Bad upload!', 400
-        image = Image.open(pic)
-        # Save the image in the specified path
-        image.save(path + filename)
-        
+
+        data_url = request.form['pic']
+
+        # Split the data URL to get the MIME type and base64-encoded data
+        mime_type, base64_data = data_url.split(",", 1)
+
+        # Decode the base64 data
+        binary_data = base64.b64decode(base64_data)
+        hash_name = current_user.email + current_user.name + str(datetime.datetime.now())
+        filename = generate_password_hash(hash_name, method='sha256')
+
+        # Write the binary data to a file
+        with open(path + filename + ".png", "wb") as f:
+            f.write(binary_data)
+
+        img = Img(name=filename, mimetype=mime_type)
+
+        db.session.add(img)
+        db.session.commit()
+
         return 'Img Uploaded!', 200
     return render_template('draw_page.html')
-
-
 
 
 @app.route('/db')
@@ -77,22 +87,24 @@ def upload():
         return 'Bad upload!', 400
 
     img = Img(img=pic.read(), name=filename, mimetype=mimetype)
+
     db.session.add(img)
     db.session.commit()
 
     return 'Img Uploaded!', 200
 
-@app.route('/profile',methods=('GET', 'POST'))
+
+@app.route('/profile', methods=('GET', 'POST'))
 @login_required
 def profile():
     if request.method == 'POST':
-        if(request.form['check_edit'] == 'edit_name'):
+        if (request.form['check_edit'] == 'edit_name'):
             current_password = request.form['password']
             new_name = request.form['name']
             new_email = request.form['email']
-            
+
             user = AuthUser.query.filter_by(email=new_email).first()
-            
+
             # Check if the current password is correct
             if not check_password_hash(current_user.password, current_password):
                 flash('Incorrect password.')
@@ -105,17 +117,18 @@ def profile():
                 current_user.name = new_name
                 current_user.email = new_email
                 db.session.commit()
-                
+
                 # Update all records in the database with the old name and email
-                BlogEntry.query.filter_by(name=old_name, email=old_email).update({BlogEntry.name: new_name, BlogEntry.email: new_email})
+                BlogEntry.query.filter_by(name=old_name, email=old_email).update(
+                    {BlogEntry.name: new_name, BlogEntry.email: new_email})
                 db.session.commit()
                 flash('Your changes have been saved.')
                 return redirect(url_for('profile'))
-        elif(request.form['check_edit'] == 'edit_pass'):
+        elif (request.form['check_edit'] == 'edit_pass'):
             old_password = request.form.get("old_password")
             new_password = request.form.get("new_password")
             confirm_password = request.form.get("confirm_password")
-            
+
             if not check_password_hash(current_user.password, old_password):
                 flash("Incorrect password, Please try again")
                 return redirect(url_for("lab13_profile"))
@@ -124,13 +137,14 @@ def profile():
                 flash("Passwords do not match, Please try again")
                 return redirect(url_for("profile"))
 
-            
-            current_user.password = generate_password_hash(new_password, method='sha256')
-            
+            current_user.password = generate_password_hash(
+                new_password, method='sha256')
+
             db.session.commit()
 
             flash("Password updated successfully.")
     return render_template('base/profile.html')
+
 
 @app.route('/login', methods=('GET', 'POST'))
 def login():
@@ -140,9 +154,8 @@ def login():
         password = request.form.get('password')
         remember = bool(request.form.get('remember'))
 
-
         user = AuthUser.query.filter_by(email=email).first()
- 
+
         # check if the user actually exists
         # take the user-supplied password, hash it, and compare it to the
         # hashed password in the database
@@ -150,7 +163,6 @@ def login():
             flash('Please check your login details and try again.')
             # if the user doesn't exist or password is wrong, reload the page
             return redirect(url_for('login'))
-
 
         # if the above check passes, then we know the user has the right
         # credentials
@@ -161,16 +173,16 @@ def login():
         return redirect(next_page)
     return render_template('base/login.html')
 
+
 @app.route('/signup', methods=('GET', 'POST'))
 def signup():
     if request.method == 'POST':
         result = request.form.to_dict()
         app.logger.debug(str(result))
- 
+
         validated = True
         validated_dict = {}
         valid_keys = ['email', 'name', 'password']
-
 
         # validate the input
         for key in result:
@@ -178,7 +190,6 @@ def signup():
             # screen of unrelated inputs
             if key not in valid_keys:
                 continue
-
 
             value = result[key].strip()
             if not value or value == 'undefined':
@@ -195,13 +206,11 @@ def signup():
             # if this returns a user, then the email already exists in database
             user = AuthUser.query.filter_by(email=email).first()
 
-
             if user:
                 # if a user is found, we want to redirect back to signup
                 # page so user can try again
                 flash('Email address already exists')
                 return redirect(url_for('signup'))
-
 
             # create a new user with the form data. Hash the password so
             # the plaintext version isn't saved.
@@ -215,9 +224,9 @@ def signup():
             db.session.add(new_user)
             db.session.commit()
 
-
         return redirect(url_for('login'))
     return render_template('base/signup.html')
+
 
 @app.route('/logout')
 @login_required
@@ -236,15 +245,14 @@ def gen_avatar_url(email, name):
     if len(temp) > 1:
         lname = temp[1][0]
 
-
     avatar_url = "https://ui-avatars.com/api/?name=" + \
         fname + "+" + lname + "&background=" + \
         bgcolor + "&color=" + color
     return avatar_url
 
+
 @app.route('/google/')
 def google():
-
 
     oauth.register(
         name='google',
@@ -256,12 +264,9 @@ def google():
         }
     )
 
-
    # Redirect to google_auth function
     redirect_uri = url_for('google_auth', _external=True)
     return oauth.google.authorize_redirect(redirect_uri)
-
-
 
 
 @app.route('/google/auth/')
@@ -269,28 +274,27 @@ def google_auth():
     token = oauth.google.authorize_access_token()
     app.logger.debug(str(token))
 
-
     userinfo = token['userinfo']
     app.logger.debug(" Google User " + str(userinfo))
     email = userinfo['email']
     user = AuthUser.query.filter_by(email=email).first()
 
-
     if not user:
         name = userinfo['given_name'] + " " + userinfo['family_name']
         random_pass_len = 8
         password = ''.join(secrets.choice(string.ascii_uppercase + string.digits)
-                          for i in range(random_pass_len))
+                           for i in range(random_pass_len))
         picture = userinfo['picture']
         new_user = AuthUser(email=email, name=name,
-                           password=generate_password_hash(
-                               password, method='sha256'),
-                           avatar_url=picture)
+                            password=generate_password_hash(
+                                password, method='sha256'),
+                            avatar_url=picture)
         db.session.add(new_user)
         db.session.commit()
         user = AuthUser.query.filter_by(email=email).first()
     login_user(user)
     return redirect('/')
+
 
 @app.route('/facebook/')
 def facebook():
@@ -307,7 +311,8 @@ def facebook():
     )
     redirect_uri = url_for('facebook_auth', _external=True)
     return oauth.facebook.authorize_redirect(redirect_uri)
- 
+
+
 @app.route('/facebook/auth/')
 def facebook_auth():
     token = oauth.facebook.authorize_access_token()
@@ -316,20 +321,25 @@ def facebook_auth():
         'https://graph.facebook.com/me?fields=id,name,email,picture{url}')
     profile = resp.json()
     email = profile['email']
-    
+
     user = AuthUser.query.filter_by(email=email).first()
     if not user:
         name = profile['name']
         random_pass_len = 8
         password = ''.join(secrets.choice(string.ascii_uppercase + string.digits)
-                          for i in range(random_pass_len))
+                           for i in range(random_pass_len))
         picture = profile['picture']['data']['url']
         new_user = AuthUser(email=email, name=name,
-                           password=generate_password_hash(
-                               password, method='sha256'),
-                           avatar_url=picture)
+                            password=generate_password_hash(
+                                password, method='sha256'),
+                            avatar_url=picture)
         db.session.add(new_user)
         db.session.commit()
         user = AuthUser.query.filter_by(email=email).first()
     login_user(user)
     return redirect('/')
+
+#image_api_call
+@app.route('/image/<filename>')
+def get_image(filename):
+    return app.send_static_file(f'static/{filename}', mimetype='image/png')

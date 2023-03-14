@@ -69,29 +69,12 @@ let doneBtn = document.querySelector(".done");
 doneBtn.addEventListener("click", () => {
   let dataUrl = canvas.toDataURL("image/png");
   let img = document.getElementById("img");
+  let input_data = document.getElementById("img-input");
+  
   img.src = dataUrl;
-
-  let fileName = "image.png";
-  let mimeType = "image/png";
-
-  let blob = dataURItoBlob(dataUrl);
-  let file = new File([blob], fileName, {type: mimeType});
-
-  let fileInput = document.getElementById("img-input");
-  fileInput.files[0] = file;
+  input_data.setAttribute("value", dataUrl);
 
 });
-
-function dataURItoBlob(dataURI) {
-  let byteString = atob(dataURI.split(",")[1]);
-  let mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
-  let ab = new ArrayBuffer(byteString.length);
-  let ia = new Uint8Array(ab);
-  for (let i = 0; i < byteString.length; i++) {
-    ia[i] = byteString.charCodeAt(i);
-  }
-  return new Blob([ab], { type: mimeString });
-}
 
 canvas.addEventListener("mousedown", (e) => {
   saveState();
