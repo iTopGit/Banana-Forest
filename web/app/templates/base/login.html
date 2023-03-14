@@ -1,6 +1,7 @@
 {% extends "base/base.html" %}
 {% block content %}
-<div class="column is-4 is-offset-4">
+
+<!-- <div class="column is-4 is-offset-4">
   <div class="box">
     <div class="wrapper">
       <div class="form-box">
@@ -32,20 +33,62 @@
       </div>
     </div>
  </div>
+</div> -->
+
+
+
+
+
+<div class="container-fluid">
+  <div class="position-absolute top-50 start-50 translate-middle bg-primary p-4 col-3 rounded border border-3 border-dark">
+    <form id="myForm" method="POST">
+      <p class="title text-center text-uppercase fs-1 fw-bold m-1">Login</p>
+      <p id="errorMessage" style="display: none; color: red;">Please check your login details and try again.</p>
+      <div class="control">
+        <p class="m-0 fw-bold"><i class="bi bi-envelope p-1"></i>Emai</p>
+        <input class="input is-large form-control" type="email" name="email" autofocus="" required>
+      </div> <br>
+      <div class="control">
+        <p class="m-0 fw-bold"><i class="bi bi-key p-1"></i> Password</p>
+        <input class="input is-large form-control" type="password" name="password" required>
+      </div> <br>
+      <div class="remember-check text-center">
+        <p class="checkbox">
+          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="remember">
+          Remember me
+        </p> 
+      </div> 
+      <a class="nav-link text-center" href="{{ url_for('signup') }}">Don't have an account?</a> <br>
+      <div class="d-flex justify-content-center">
+        <button id="login_btn" class="btn btn-success btn-lg is-block is-info is-large is-fullwidth border border-3 border-dark">Login</button>
+      </div>
+    </form>
+  </div>
 </div>
+
+<div class="collapse m-0" id="alert">
+  <div class="card card-body text-danger text-wrap text-break">
+    Please check your login details and try again.
+  </div>
+  <div class="badge bg-danger text-primary text-wrap" style="width: 6rem;">
+    This text should wrap.
+  </div>
+</div>
+
 <script>
   const myForm = document.getElementById("myForm");
   const errorMessage = document.getElementById("errorMessage");
 
   {% with messages = get_flashed_messages() %}
-      {% if messages %}
-          if ("{{ messages[0] }}" === "Please check your login details and try again.") {
-            errorMessage.style.display = "block";
-          } else {
-            errorMessage.style.display = "none";
-          }
-      {% endif %}
+  {% if messages %}
+  if ("{{ messages[0] }}" === "Please check your login details and try again.") {
+    errorMessage.style.display = "block";
+  } else {
+    errorMessage.style.display = "none";
+  }
+  {% endif %}
   {% endwith %}
 </script>
-<link rel="stylesheet" href="../static/css/login-signup.css">
+
+<!-- <link rel="stylesheet" href="../static/css/login-signup.css"> -->
 {% endblock %}

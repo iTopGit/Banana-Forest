@@ -12,6 +12,47 @@
        alt="Facebook"> <br>
   </a>
 </p>
+
+
+
+
+
+<div class="container-fluid">
+  <div class="position-absolute top-50 start-50 translate-middle bg-primary p-4">
+    <form id="myForm" method="POST">
+      <h2 class="title">Sign Up</h2>
+      <p id="errorMessage" style="display: none; color: red;">Please check your login details and try again.</p>
+      <div class="control">
+        <span class="icon">
+          <i class="fa-solid fa-envelope"></i>
+        </span>
+        <input class="input is-large" type="email" name="email"  autofocus="" required>
+        <label>Emai</label>
+      </div>
+      <div class="control">
+        <span class="icon">
+          <i class="fa-sharp fa-solid fa-key"></i>
+        </span>
+        <input class="input is-large" type="password" name="password"  required>
+        <label>Password</label>
+      </div>
+      <div class="remember-check">
+        <p class="checkbox">
+          <input type="checkbox" name="remember">
+          Remember me
+        </p>
+      </div>
+      <button id="login_btn" class="button is-block is-info is-large is-fullwidth">Login</button>
+    </form>
+  </div>
+</div>
+
+
+
+
+
+
+
 <div class="column is-4 is-offset-4">
   <div class="box">
     <div class="wrapper">
@@ -47,6 +88,8 @@
   </div>
  </div>
 </div>
+
+
 <script>
   const myForm = document.getElementById("myForm");
   const errorMessage = document.getElementById("errorMessage");
@@ -60,5 +103,5 @@
     {% endif %}
    {% endwith %}
 </script>
-<link rel="stylesheet" href="../static/css/login-signup.css">
+<!-- <link rel="stylesheet" href="../static/css/login-signup.css"> -->
 {% endblock %}

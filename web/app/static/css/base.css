@@ -1,7 +1,13 @@
 body {
-    background-color: #FAF9F6;
+    background-color: #014D4E;
 }
-#nav-base{
+
+.navbar {
+    background-color: #9ACD32;
+    border: 3px solid #008000;
+}
+
+/* #nav-base{
     
     border-bottom: 2px solid gray;
 }
@@ -17,4 +23,4 @@ body {
 }
 img.tw-user-small {
     height: 50px;
-}
+} */
