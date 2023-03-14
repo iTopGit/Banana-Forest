@@ -10,15 +10,15 @@ class BlogEntry(db.Model, SerializerMixin):
     name = db.Column(db.String(50))
     message = db.Column(db.String(280))
     email = db.Column(db.String(50))
-    img_path = db.Column(db.String(50))
+    img_id = db.Column(db.String(50))
     date_created = db.Column(db.DateTime, nullable=False)
     date_updated = db.Column(db.DateTime, nullable=False)
     
-    def __init__(self, name, message, email, img_path):
+    def __init__(self, name, message, email, img_id):
         self.name = name
         self.message = message
         self.email = email
-        self.img_path = img_path
+        self.img_id = img_id
         self.date_created = datetime.datetime.now()
         self.date_updated = datetime.datetime.now()
 

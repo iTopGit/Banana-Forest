@@ -3,7 +3,7 @@ import string
 import base64
 import datetime
 
-from flask import (jsonify, render_template,
+from flask import (jsonify, render_template,send_file,
                    request, url_for, flash, redirect)
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.urls import url_parse
@@ -16,6 +16,7 @@ from app import app
 from app import db
 from app import login_manager
 from PIL import Image
+from io import BytesIO
 
 from app.models.image import Img
 from app.models.blogentry import BlogEntry
@@ -32,7 +33,9 @@ def load_user(user_id):
 @app.route('/')
 def index():
     return render_template('base/index.html')
-
+@app.route('/test')
+def test():
+    return render_template('img_test.html')
 
 @app.route('/draw', methods=["POST", "GET"])
 @login_required
@@ -45,18 +48,20 @@ def draw_page():
         data_url = request.form['pic']
 
         # Split the data URL to get the MIME type and base64-encoded data
-        mime_type, base64_data = data_url.split(",", 1)
-
+        mime_type,base64_data = data_url.split(",", 1)#[1]
+        # mime_type = data_url.split(';')[0].split(':')[1]
+        app.logger.debug(str("mime_type : "+ mime_type))
+        
         # Decode the base64 data
         binary_data = base64.b64decode(base64_data)
         hash_name = current_user.email + current_user.name + str(datetime.datetime.now())
-        filename = generate_password_hash(hash_name, method='sha256')
+        filename = generate_password_hash(hash_name, method='sha256')+ ".png"
 
         # Write the binary data to a file
-        with open(path + filename + ".png", "wb") as f:
-            f.write(binary_data)
+        # with open(path + filename, "wb") as f:
+            # f.write(binary_data)
 
-        img = Img(name=filename, mimetype=mime_type)
+        img = Img(name=filename, mimetype=mime_type, data=binary_data)
 
         db.session.add(img)
         db.session.commit()
@@ -77,7 +82,7 @@ def db_connection():
 
 @app.route('/upload', methods=["POST"])
 def upload():
-    pic = request.files['pic']
+    pic = request.files['pic']['data']
     if not pic:
         return 'No pic uploaded!', 400
 
@@ -340,6 +345,55 @@ def facebook_auth():
     return redirect('/')
 
 #image_api_call
-@app.route('/image/<filename>')
-def get_image(filename):
-    return app.send_static_file(f'static/{filename}', mimetype='image/png')
+# @app.route('/image/<filename>')
+# def get_image(filename):
+#     return app.send_static_file(f'static/img/user-blog{filename}', mimetype='image/png')
+
+@app.route('/image/<int:image_id>')
+def get_image(image_id):
+    # query database for image
+    img = Img.query.get(image_id)
+    if img:
+        # create a response with the image data and mimetype
+        return send_file(BytesIO(img.data), mimetype=img.mimetype)
+    else:
+        # image not found
+        return "Image not found", 404
+
+@app.route("/db/blogEntry")
+@login_required
+def db_BlogEntry():
+    blogEntry = []
+    db_blogEntry = BlogEntry.query.all()
+
+    blogEntry = list(map(lambda x: x.to_dict(), db_blogEntry))
+    blogEntry.sort(key=lambda x: x['id'])
+    app.logger.debug("DB blogEntry: " + str(blogEntry))
+
+    return jsonify(blogEntry)
+
+@app.route("/db/authuser")
+@login_required
+def db_authuser():
+    authuser = []
+    db_authuser = AuthUser.query.filter()
+
+    # authuser = list(map(lambda x: x.to_dict(), db_authuser))
+    authuser.sort(key=lambda x: x['id'])
+    app.logger.debug("DB AuthUser: " + str(authuser))
+
+    return jsonify(authuser)
+
+@app.route("/db/image")
+@login_required
+def db_image():
+    Image = []
+    db_Image = Img.query.all()
+    # db_Image = Img.query.filter()
+    app.logger.debug("DB Image: " + str(db_Image))
+
+    # Image = list(map(lambda x: x.to_dict(), db_Image))
+    Image.sort(key=lambda x: x['id'])
+    app.logger.debug("DB image: " + str(Image))
+
+    return jsonify(Image)
