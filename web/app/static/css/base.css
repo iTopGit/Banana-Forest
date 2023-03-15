@@ -7,6 +7,21 @@ body {
     border: 3px solid #008000;
 }
 
+.dropdown-menu {
+    background-color: #9ACD32;
+    color: black;
+  }
+
+.dropdown-menu a:focus {
+    background-color: #008000;
+    color: white;
+  }
+
+img.tw-user-small {
+    height: 40px;
+    border: 3px solid #008000;
+} 
+
 /* #nav-base{
     
     border-bottom: 2px solid gray;
@@ -20,7 +35,4 @@ body {
     padding-left: 1%;
     padding-right: 1%;
     background-color: 	#f1eadb ;
-}
-img.tw-user-small {
-    height: 50px;
-} */
+}*/
