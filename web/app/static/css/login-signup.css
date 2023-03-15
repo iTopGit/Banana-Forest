@@ -1,7 +1,8 @@
-body {
-    background-color: #161314
+.inputform {
+    background-color: #9ACD32;
 }
-input[type=text],
+
+/* input[type=text],
 input[type=email],
 input[type=password],
 select{
@@ -27,4 +28,4 @@ button {
     font-weight: bold;
     border: 1px solid white;
     padding: 12px 20px;
-}
+} */

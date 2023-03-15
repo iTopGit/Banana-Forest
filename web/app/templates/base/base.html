@@ -48,8 +48,8 @@
         {% if current_user.is_authenticated %}
         <a class="navbar-brand" href="http://localhost:56733/draw">Draw</a>
         <div class="dropdown">
-          <img class="tw-user-small rounded-circle p-1 object-fit-cover float-end dropdown-toggle"
-            src="{{ current_user.avatar_url }}" data-bs-toggle="dropdown" aria-expanded="false">
+          <img class="tw-user-small rounded-circle object-fit-cover float-end dropdown-toggle"
+            src="{{ current_user.avatar_url }}" data-bs-toggle="dropdown" aria-expanded="false" style="max-height: 40px;">
           <ul class="dropdown-menu dropdown-menu-lg-end p-2">
             <li><a class="dropdown-item" href="{{ url_for('profile') }}">Profile</a></li>
             <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>

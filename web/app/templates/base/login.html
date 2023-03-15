@@ -40,13 +40,14 @@
 
 
 <div class="container-fluid">
-  <div class="position-absolute top-50 start-50 translate-middle bg-primary p-4 col-3 rounded border border-3 border-dark">
+  <div
+    class="position-absolute top-50 start-50 translate-middle p-4 col-3 rounded border border-3 border-dark inputform">
     <form id="myForm" method="POST">
       <p class="title text-center text-uppercase fs-1 fw-bold m-1">Login</p>
       <p id="errorMessage" style="display: none; color: red;">Please check your login details and try again.</p>
       <div class="control">
         <p class="m-0 fw-bold"><i class="bi bi-envelope p-1"></i>Emai</p>
-        <input class="input is-large form-control" type="email" name="email" autofocus="" required>
+        <input class="input is-large form-control" type="email" name="email" autofocus required>
       </div> <br>
       <div class="control">
         <p class="m-0 fw-bold"><i class="bi bi-key p-1"></i> Password</p>
@@ -56,11 +57,22 @@
         <p class="checkbox">
           <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="remember">
           Remember me
-        </p> 
-      </div> 
+        </p>
+      </div>
+      <p class="d-flex justify-content-center">
+        <a href="google/" class="nav-link m-1 p-2 rounded border-3" style="border: 3px solid #FF4500;">
+          <i class="bi bi-google"></i> &nbsp
+          <span>Google</span> &nbsp
+        </a>
+        <a href="facebook/" class="nav-link m-1 p-2 rounded border-3" style="border: 3px solid #1E90FF;">
+          <i class="bi bi-facebook"></i> &nbsp
+          <span>Facebook</span> &nbsp
+        </a>
+      </p>
       <a class="nav-link text-center" href="{{ url_for('signup') }}">Don't have an account?</a> <br>
       <div class="d-flex justify-content-center">
-        <button id="login_btn" class="btn btn-success btn-lg is-block is-info is-large is-fullwidth border border-3 border-dark">Login</button>
+        <button id="login_btn"
+          class="btn btn-success btn-lg is-block is-info is-large is-fullwidth border border-3 border-dark">Login</button>
       </div>
     </form>
   </div>
@@ -90,5 +102,5 @@
   {% endwith %}
 </script>
 
-<!-- <link rel="stylesheet" href="../static/css/login-signup.css"> -->
+<link rel="stylesheet" href="../static/css/login-signup.css">
 {% endblock %}
