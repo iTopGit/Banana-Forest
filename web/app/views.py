@@ -29,10 +29,82 @@ def load_user(user_id):
     # user table, use it in the query for the user
     return AuthUser.query.get(int(user_id))
 
-
-@app.route('/')
+@app.route('/', methods=('GET', 'POST'))
 def index():
+    if request.method == 'POST':
+        result = request.form.to_dict()
+        app.logger.debug(str(result))
+        id_ = result.get('id', '')
+        validated = True
+        validated_dict = dict()
+        validated_dict['img_id'] = -1
+        validated_dict['name'] = current_user.name
+        validated_dict['email'] = current_user.email
+        validated_dict['avatar_url'] = current_user.avatar_url
+
+        valid_keys = ['message']
+
+        # validate the input
+        for key in result:
+            app.logger.debug(key, result[key])
+            # screen of unrelated inputs
+            if key not in valid_keys:
+                continue
+
+            value = result[key].strip()
+            if not value or value == 'undefined':
+                validated = False
+                break
+            validated_dict[key] = value
+
+        if validated:
+            app.logger.debug('validated dict: ' + str(validated_dict))
+            # if there is no id_: create blogEntry
+            if not id_:
+                validated_dict['owner_id'] = current_user.id
+                # entry = BlogEntry(**validated_dict)
+                entry = PrivateContact(**validated_dict)
+                app.logger.debug(str(entry))
+                db.session.add(entry)
+            # if there is an id_ already: update blogEntry
+            else:
+                # blogEntry = BlogEntry.query.get(id_)
+                blogEntry = PrivateContact.query.get(id_)
+                if blogEntry.owner_id == current_user.id:
+                    blogEntry.update(**validated_dict)
+
+            db.session.commit()
+
+        return db_post()
     return render_template('base/index.html')
+
+@app.route("/post")
+def db_post():
+    post = []
+    db_post = BlogEntry.query.all()
+
+    post = list(map(lambda x: x.to_dict(), db_post))
+    post.sort(key=lambda x:x['id'])
+    app.logger.debug("DB Content: " + str(post))
+
+    return jsonify(post)
+
+@app.route('/remove_post', methods=('GET', 'POST'))
+def remove_post():
+    app.logger.debug("REMOVE")
+    if request.method == 'POST':
+        result = request.form.to_dict()
+        id_ = result.get('id', '')
+        try:
+            post = PrivateContact.query.get(id_)
+            if post.owner_id == current_user.id:
+                db.session.delete(post)
+            db.session.commit()
+        except Exception as ex:
+            app.logger.debug(ex)
+            raise
+    return db_post()
+
 @app.route('/test')
 def test():
     return render_template('img_test.html')

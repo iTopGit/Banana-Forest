@@ -1,3 +1,96 @@
 {% extends "base/base.html" %}
 {% block content %}
+<div id="name_user" hidden="hidden">{{ current_user.name }}</div>
+<div id="email_user" hidden="hidden">{{ current_user.email }}</div>
+<div id="id_user" hidden="hidden">{{ current_user.id }}</div>
+<div id="choose_form" class="form-popup">
+  <div class="wrapper_choose">
+      <form class="form-container">
+          <h2 class="title">Choose</h2>
+          <div class="forminput">
+            <button type="button" class="btn_choose" id="message_btn">Message</button>
+          </div>
+          <div class="forminput">
+            <button  type="button" class="btn_choose" id="draw_btn" onclick="Gotodraw()">Draw</button>
+          </div>
+          <div class="button_choose">
+              <button type="button" class="btn_choose" id="closeForm">Cancel</button>
+          </div>
+      </form>
+  </div>
+</div>
+<div id="PostForm" class="form-popup-post">
+  <div class="wrapper_post">
+      <form class="form-container" id="postform">
+          <h2 class="title">Post</h2>
+          <div class="forminput">
+              <textarea 
+                cols="40" 
+                rows="5" 
+                id="message" 
+                name="message" 
+                maxlength="280"
+                placeholder="Your message..." 
+                required 
+                style="background-color: #28282B; color: white;"></textarea>
+          </div>
+          <input type="hidden" id="entryid" name="id" value="">
+          <input type="hidden" id="name" name="name" value="{{ current_user.name }}">
+          <input type="hidden" id="usr_email" name="email" value="{{ current_user.email }}">
+          <input type="hidden" id="avatar_url" name="avatar_url" value="{{ current_user.avatar_url }}">
+          <div class="forminput">
+            <input
+              class="btn_post"
+              href="#"
+              type="submit"
+              name="submit"
+              value="Confirm"
+            />
+            <button type="button" class="btn_post" id="closeFormPost">Cancel</button>
+          </div>
+      </form>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+      <div id="left_3" class="col-md-2" >
+      </div>
+      <div id="center_6" class="col-md-8">
+          <div class="blog" id="blog-data"></div>
+      </div>
+      <div id="right_3" class="col-md-2">
+      </div>
+  </div>
+</div>
+
+<script>
+  const openChooseButton = document.getElementById("add_post");
+  const ChooseForm = document.getElementById("choose_form");
+  const closePopupChoose = document.getElementById("closeForm");
+
+  const openPostButton = document.getElementById("message_btn");
+  const PostForm = document.getElementById("PostForm");
+  const closePostForm = document.getElementById("closeFormPost");
+
+  openChooseButton.addEventListener("click", () => {
+    ChooseForm.style.display = "block";
+  });
+
+
+  closePopupChoose.addEventListener("click", () => {
+    ChooseForm.style.display = "none";
+  });
+
+  function Gotodraw() {
+    window.location.href="{{ url_for('draw_page') }}";  
+  }
+
+  openPostButton.addEventListener("click", () => {
+    PostForm.style.display = "block";
+    ChooseForm.style.display = "none";
+  });
+  closePostForm.addEventListener("click", () => {
+    PostForm.style.display = "none";
+  });
+</script>
 {% endblock %}

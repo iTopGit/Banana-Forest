@@ -27,12 +27,38 @@
   <!-- css -->
   <link rel="stylesheet" href="../static/css/open-iconic-bootstrap.css">
   <link rel="stylesheet" href="../static/css/base.css">
+  <link rel="stylesheet" href="../static/css/post.css">
   <script src="https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.js"></script>
+  <script src="../static/js/post-script.js"></script>
 </head>
 
 <body>
 
-  <nav class="navbar navbar-expand-lg rounded-bottom-3 border-3">
+  <div class="nav-div">
+    <nav class="navbar navbar-expand-md navbar-light" id="nav-base">
+      <a class="nav-item nav-link" href="{{ url_for('index') }}" style="color: black;"><span
+          class="fa-solid fa-house"></span> Home</a>
+      {% if current_user.is_authenticated %}
+      <a class="nav-item nav-link" href="{{ url_for('profile') }}" style="color: black;"><span
+          class="fa-solid fa-user"></span> Profile</a>
+      <a class="nav-item nav-link" href="{{ url_for('logout') }}" style="color: black;"><span
+          class="fa-solid fa-right-from-bracket"></span> Logout</a>
+      {% endif %}
+
+      {% if current_user.is_authenticated %}
+      <img class="tw-user-small rounded-circle" src="{{ current_user.avatar_url }}" alt=""
+        style="padding-right:5px; margin-left:auto;">
+      <button class="btn" id="add_tweet" type="button">Tweet</button>
+      {% else %}
+      <a class="btn" id="btn_lg" href="{{ url_for('login') }}" style="color: black;"><span
+          class="fa-solid fa-right-from-bracket"></span> Login</a>
+      <a class="btn" href="{{ url_for('signup') }}" style="color: black;"><span class="fa-solid fa-user-plus"></span>
+        Sign Up</a>
+      {% endif %}
+    </nav>
+  </div>
+
+  <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
       <a class="navbar-brand fw-bold" href="{{ url_for('index') }}">Banana Forest</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
