@@ -118,30 +118,32 @@ canvas.addEventListener("mousemove", (e) => {
   let currentY = (e.clientY - rect.top) * scaleY;
   switch (toolType) {
     case "easer":
+      ctx.globalAlpha = 1;
       ctx.strokeStyle = "#ffffff";
       break;
     case "highlight":
       //do nothing
       ctx.globalAlpha = 0.5;
     default:
-      if (prevX == null || prevY == null || !draw) {
-        return;
-      }
-
-      // Add the current point to the path
-      ctx.beginPath();
-      ctx.moveTo(prevX, prevY);
-      ctx.lineTo(currentX, currentY);
-      ctx.stroke();
-
-      // Smooth the path
-      let midX = (prevX + currentX) / 2;
-      let midY = (prevY + currentY) / 2;
-      ctx.quadraticCurveTo(prevX, prevY, midX, midY);
-
-      prevX = currentX;
-      prevY = currentY;
+      ctx.globalAlpha = 1;
   }
+  if (prevX == null || prevY == null || !draw) {
+    return;
+  }
+
+  // Add the current point to the path
+  ctx.beginPath();
+  ctx.moveTo(prevX, prevY);
+  ctx.lineTo(currentX, currentY);
+  ctx.stroke();
+
+  // Smooth the path
+  let midX = (prevX + currentX) / 2;
+  let midY = (prevY + currentY) / 2;
+  ctx.quadraticCurveTo(prevX, prevY, midX, midY);
+
+  prevX = currentX;
+  prevY = currentY;
 });
 
 // Model function

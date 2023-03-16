@@ -24,6 +24,6 @@ class AuthUser(db.Model, UserMixin):
 class PosonalPost(BlogEntry, UserMixin, SerializerMixin):
     owner_id = db.Column(db.Integer, db.ForeignKey('auth_users.id'))
     
-    def __init__(self, owner_id, name, message, email,img_id,avatar_url):
-        super().__init__( name, message, email,img_id,avatar_url)
+    def __init__(self, owner_id,  message, img_id):
+        super().__init__(message, img_id)
         self.owner_id = owner_id

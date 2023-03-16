@@ -38,9 +38,6 @@ def index():
         validated = True
         validated_dict = dict()
         validated_dict['img_id'] = '-1'
-        validated_dict['name'] = current_user.name
-        validated_dict['email'] = current_user.email
-        validated_dict['avatar_url'] = current_user.avatar_url
 
         valid_keys = ['message']
 
@@ -78,16 +75,7 @@ def index():
         # return db_post()
     return render_template('base/index.html')
 
-@app.route("/post_db")
-def db_post():
-    post = []
-    db_post = BlogEntry.query.all()
 
-    post = list(map(lambda x: x.to_dict(), db_post))
-    post.sort(key=lambda x:x['id'])
-    app.logger.debug("DB Content: " + str(post))
-
-    return jsonify(post)
 
 @app.route('/remove_post', methods=('GET', 'POST'))
 def remove_post():
@@ -390,6 +378,19 @@ def get_image(image_id):
     else:
         # image not found
         return "Image not found", 404
+    
+@app.route('/user/<int:user_id>')
+def get_user(user_id):
+    # query database for image
+    db_user = AuthUser.query.get(user_id)
+    if db_user:
+        user = {"name":db_user.name, "email":db_user.email, "avatar_url":db_user.avatar_url}
+        app.logger.debug("DB user: " + str(user))
+        # create a response with the image data and mimetype
+        return jsonify(user)
+    else:
+        # image not found
+        return "User not found", 404
 
 @app.route("/db/image")
 @login_required
@@ -404,3 +405,14 @@ def db_image():
     app.logger.debug("DB image: " + str(Image))
 
     return jsonify(Image)
+
+@app.route("/post_db")
+def db_post():
+    post = []
+    db_post = PosonalPost.query.all()
+
+    post = list(map(lambda x: x.to_dict(), db_post))
+    post.sort(key=lambda x:x['id'])
+    app.logger.debug("DB Content: " + str(post))
+
+    return jsonify(post)
