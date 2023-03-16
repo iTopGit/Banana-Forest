@@ -22,6 +22,8 @@ from app.models.image import Img
 from app.models.blogentry import BlogEntry
 from app.models.authuser import AuthUser, PosonalPost
 
+check_login = 'not_google'
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -167,52 +169,57 @@ def upload():
 @login_required
 def profile():
     if request.method == 'POST':
-        if (request.form['check_edit'] == 'edit_name'):
-            current_password = request.form['password']
-            new_name = request.form['name']
-            new_email = request.form['email']
+        if check_login == 'not_google':
+            flash("This is Google login")
+        else:
+            if (request.form['check_edit'] == 'edit_name'):
+                current_password = request.form['password']
+                new_name = request.form['name']
+                new_email = request.form['email']
 
-            user = AuthUser.query.filter_by(email=new_email).first()
+                user = AuthUser.query.filter_by(email=new_email).first()
 
-            # Check if the current password is correct
-            if not check_password_hash(current_user.password, current_password):
-                flash('Incorrect password.')
-            elif user and current_user.email != request.form['email']:
-                flash('Email is already taken.')
-            else:
-                # Update the user's name and email
-                old_name = current_user.name
-                old_email = current_user.email
-                current_user.name = new_name
-                current_user.email = new_email
+                # Check if the current password is correct
+                if not check_password_hash(current_user.password, current_password):
+                    flash('Incorrect password.')
+                elif user and current_user.email != request.form['email']:
+                    flash('Email is already taken.')
+                else:
+                    # Update the user's name and email
+                    old_name = current_user.name
+                    old_email = current_user.email
+                    current_user.name = new_name
+                    current_user.email = new_email
+                    db.session.commit()
+
+                    # Update all records in the database with the old name and email
+                    BlogEntry.query.filter_by(name=old_name, email=old_email).update(
+                        {BlogEntry.name: new_name, BlogEntry.email: new_email})
+                    db.session.commit()
+                    flash('Your changes have been saved.')
+                    return redirect(url_for('profile'))
+            elif (request.form['check_edit'] == 'edit_pass'):
+                old_password = request.form.get("old_password")
+                new_password = request.form.get("new_password")
+                confirm_password = request.form.get("confirm_password")
+                
+
+                if not check_password_hash(current_user.password, old_password):
+                    flash("Incorrect password, Please try again")
+                    return redirect(url_for("lab13_profile"))
+
+                if new_password != confirm_password:
+                    flash("Passwords do not match, Please try again")
+                    return redirect(url_for("profile"))
+
+                current_user.password = generate_password_hash(
+                    new_password, method='sha256')
+
                 db.session.commit()
 
-                # Update all records in the database with the old name and email
-                BlogEntry.query.filter_by(name=old_name, email=old_email).update(
-                    {BlogEntry.name: new_name, BlogEntry.email: new_email})
-                db.session.commit()
-                flash('Your changes have been saved.')
-                return redirect(url_for('profile'))
-        elif (request.form['check_edit'] == 'edit_pass'):
-            old_password = request.form.get("old_password")
-            new_password = request.form.get("new_password")
-            confirm_password = request.form.get("confirm_password")
+                flash("Password updated successfully.")
+        
             
-
-            if not check_password_hash(current_user.password, old_password):
-                flash("Incorrect password, Please try again")
-                return redirect(url_for("lab13_profile"))
-
-            if new_password != confirm_password:
-                flash("Passwords do not match, Please try again")
-                return redirect(url_for("profile"))
-
-            current_user.password = generate_password_hash(
-                new_password, method='sha256')
-
-            db.session.commit()
-
-            flash("Password updated successfully.")
     return render_template('base/profile.html')
 
 
@@ -303,6 +310,8 @@ def signup():
 @app.route('/logout')
 @login_required
 def logout():
+    global check_login
+    check_login = 'not_google'
     logout_user()
     return redirect(url_for('index'))
 
@@ -325,7 +334,8 @@ def gen_avatar_url(email, name):
 
 @app.route('/google/')
 def google():
-
+    global check_login
+    check_login = 'google'
     oauth.register(
         name='google',
         client_id=app.config['GOOGLE_CLIENT_ID'],
