@@ -136,11 +136,11 @@ function post_blog(
   current_id,
   like
 ) {
-    // console.log(typeof (like));
+  // console.log(typeof (like));
   let like_val = get_val(like, owner_id);
   let like_check = check_color(like, owner_id);
-//   console.log("like_check : " + like_check);
-//   console.log("like_val : " + like_val);
+  //   console.log("like_check : " + like_check);
+  //   console.log("like_val : " + like_val);
   return `
     <div class="tweet">
     <div class="row">
@@ -297,12 +297,13 @@ function like_blog(id) {
     return;
   }
   document.getElementById("like" + id).style.color = "red";
-  
+
   document.getElementById("like" + id).disabled = true;
   setTimeout(() => {
     document.getElementById("like" + id).disabled = false;
   }, 1000);
-  document.getElementById("like" + id).innerHTML = parseInt(document.getElementById("like" + id).innerHTML) + 1;
+  document.getElementById("like" + id).innerHTML =
+    parseInt(document.getElementById("like" + id).innerHTML) + 1;
   fetch_like(state, id);
 }
 
@@ -342,14 +343,13 @@ function get_val(array, id) {
   let num = 0;
   try {
     num = array.length;
-  } catch (error) {
-  }
+  } catch (error) {}
 
   return num;
 }
 function check_color(array, id) {
   let check = false;
-    // console.log(id)
+  // console.log(id)
   try {
     check = array.includes(id);
     // console.log(check)
@@ -358,3 +358,5 @@ function check_color(array, id) {
   }
   return check;
 }
+
+

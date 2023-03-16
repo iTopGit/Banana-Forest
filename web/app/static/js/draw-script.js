@@ -20,6 +20,7 @@ let redoList = [];
 canvas.style.backgroundColor = "white";
 const ctx = canvas.getContext("2d");
 ctx.lineWidth = lineW;
+ctx.lineJoin = "round";
 ctx.lineCap = "round";
 ctx.fillStyle = "#ffffff";
 // canvas.style.backgroundColor = "#FFFFFF";
@@ -33,7 +34,7 @@ theInput.addEventListener(
     theColor = theInput.value;
     console.log("the color" + theColor);
     // ctx.fillStyle = theColor;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // ctx.fillRect(0, 0, canvas.width, canvas.height);
     // body.style.backgroundColor = theColor;
   },
   false
@@ -56,6 +57,7 @@ clrs = Array.from(clrs);
 clrs.forEach((clr) => {
   clr.addEventListener("click", () => {
     ctx.strokeStyle = clr.dataset.clr;
+    theColor = clr.dataset.clr;
   });
 });
 
@@ -90,15 +92,34 @@ canvas.addEventListener("mousedown", (e) => {
   let scaleX = canvas.width / rect.width;
   let scaleY = canvas.height / rect.height;
   switch (toolType) {
+    case "picker":
+      //set color
+      const x = e.offsetX;
+      const y = e.offsetY;
+      const pixel = ctx.getImageData(x, y, 1, 1).data;
+      theColor = `rgb(${pixel[0]}, ${pixel[1]}, ${pixel[2]})`;
+      theInput.value = theColor;
+      console.log(theColor)
+      // do something with the selected color, e.g. update the background color
+      break;
     case "easer":
+      ctx.globalAlpha = 1;
       ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = lineW;
+      prevX = (e.clientX - rect.left) * scaleX;
+      prevY = (e.clientY - rect.top) * scaleY;
       break;
     case "highlight":
-      //do nothing
-      ctx.globalAlpha = 0.5;
+      ctx.globalAlpha = 0.1;
+      ctx.lineWidth = lineW * 2;
+      ctx.strokeStyle = theColor;
+      prevX = (e.clientX - rect.left) * scaleX;
+      prevY = (e.clientY - rect.top) * scaleY;
       break;
     default:
-      ctx.globalAlpha = 0.5;
+      ctx.globalAlpha = 1;
+      ctx.lineWidth = lineW;
+      ctx.strokeStyle = theColor;
       prevX = (e.clientX - rect.left) * scaleX;
       prevY = (e.clientY - rect.top) * scaleY; // Convert the Y coordinate to canvas coordinate
   }
@@ -119,13 +140,13 @@ canvas.addEventListener("mousemove", (e) => {
   switch (toolType) {
     case "easer":
       ctx.globalAlpha = 1;
-      ctx.strokeStyle = "#ffffff";
+
       break;
     case "highlight":
       //do nothing
-      ctx.globalAlpha = 0.5;
+      ctx.globalAlpha = 0.25;
     default:
-      ctx.globalAlpha = 1;
+    // ctx.globalAlpha = 1;
   }
   if (prevX == null || prevY == null || !draw) {
     return;
@@ -382,4 +403,24 @@ function getCurrentColor() {
   let color = colorInput.value;
 
   return color;
+}
+function setColor(r, g, b) {
+  brushColor.color = `rgba(${r},${g},${b},255)`;
+  brushColor.r = r;
+  brushColor.g = g;
+  brushColor.b = b;
+  swatch.style.background = brushColor.color;
+}
+
+function sampleColor(x, y) {
+  //get imageData
+  let colorLayer = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+  let colorPos = (y * canvas.width + x) * 4;
+
+  //clicked color
+  let r = colorLayer.data[colorPos];
+  let g = colorLayer.data[colorPos + 1];
+  let b = colorLayer.data[colorPos + 2];
+  setColor(r, g, b);
 }
