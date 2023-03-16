@@ -21,7 +21,7 @@ canvas.style.backgroundColor = "white";
 const ctx = canvas.getContext("2d");
 ctx.lineWidth = lineW;
 ctx.lineCap = "round";
-ctx.fillStyle = "#FFFFFF"
+ctx.fillStyle = "#FFFFFF";
 canvas.style.backgroundColor = "#FFFFFF";
 
 var theInput = document.getElementById("favcolor");
@@ -39,10 +39,9 @@ theInput.addEventListener(
   false
 );
 
-
-function changestate(state){
+function changestate(state) {
   toolType = state;
-  console.log(state)
+  console.log(state);
 }
 
 document.getElementById("ageInputId").oninput = function () {
@@ -86,18 +85,20 @@ doneBtn.addEventListener("click", () => {
 
 canvas.addEventListener("mousedown", (e) => {
   saveState();
+  draw = true;
+  let rect = canvas.getBoundingClientRect();
+  let scaleX = canvas.width / rect.width;
+  let scaleY = canvas.height / rect.height;
   switch (toolType) {
-    case "fill":
-      //do nothing
+    case "easer":
+      ctx.strokeStyle = "#ffffff";
       break;
-    default: // Get the position of the canvas on the screen
-      // Calculate the scale factor for X coordinate
-      // Calculate the scale factor for Y coordinate
-      // Convert the X coordinate to canvas coordinate
-      draw = true;
-      let rect = canvas.getBoundingClientRect();
-      let scaleX = canvas.width / rect.width;
-      let scaleY = canvas.height / rect.height;
+    case "highlight":
+      //do nothing
+      ctx.globalAlpha = 0.5;
+      break;
+    default:
+      ctx.globalAlpha = 0.5;
       prevX = (e.clientX - rect.left) * scaleX;
       prevY = (e.clientY - rect.top) * scaleY; // Convert the Y coordinate to canvas coordinate
   }
@@ -116,63 +117,12 @@ canvas.addEventListener("mousemove", (e) => {
   let currentX = (e.clientX - rect.left) * scaleX;
   let currentY = (e.clientY - rect.top) * scaleY;
   switch (toolType) {
-    case "fill":
-      let pixelStack = [[Math.floor(currentX), Math.floor(currentY)]];
-      let startColor = getPixelColor(
-        imageData,
-        Math.floor(currentX),
-        Math.floor(currentY)
-      );
-      let replacementColor = getCurrentColor();
-
-      if (startColor === replacementColor) {
-        return;
-      }
-
-      while (pixelStack.length) {
-        let newPos, x, y, pixelPos;
-        newPos = pixelStack.pop();
-        x = newPos[0];
-        y = newPos[1];
-        pixelPos = (y * canvas.width + x) * 4;
-        while (y-- >= 0 && matchStartColor(imageData, pixelPos, startColor)) {
-          pixelPos -= canvas.width * 4;
-        }
-        pixelPos += canvas.width * 4;
-        ++y;
-        let reachLeft = false;
-        let reachRight = false;
-        while (
-          y++ < canvas.height - 1 &&
-          matchStartColor(imageData, pixelPos, startColor)
-        ) {
-          colorPixel(imageData, pixelPos, replacementColor);
-          if (x > 0) {
-            if (matchStartColor(imageData, pixelPos - 4, startColor)) {
-              if (!reachLeft) {
-                pixelStack.push([x - 1, y]);
-                reachLeft = true;
-              }
-            } else if (reachLeft) {
-              reachLeft = false;
-            }
-          }
-          if (x < canvas.width - 1) {
-            if (matchStartColor(imageData, pixelPos + 4, startColor)) {
-              if (!reachRight) {
-                pixelStack.push([x + 1, y]);
-                reachRight = true;
-              }
-            } else if (reachRight) {
-              reachRight = false;
-            }
-          }
-          pixelPos += canvas.width * 4;
-        }
-      }
-      ctx.putImageData(imageData, 0, 0);
+    case "easer":
+      ctx.strokeStyle = "#ffffff";
       break;
-
+    case "highlight":
+      //do nothing
+      ctx.globalAlpha = 0.5;
     default:
       if (prevX == null || prevY == null || !draw) {
         return;
