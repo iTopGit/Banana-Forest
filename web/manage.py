@@ -22,6 +22,7 @@ def seed_db():
         BlogEntry(name='Nomnom', message='musu', email='capybara@slay.ca.py', img_id=1)
     )
     db.session.commit()
+    
     db.session.add(AuthUser(email="flask@204212", name='สมชาย ทรงแบด',
         password=generate_password_hash('1234', method='sha256'),
         avatar_url='https://ui-avatars.com/api/?name=\สมชาย+ทรงแบด&background=83ee03&color=fff'))
