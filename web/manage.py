@@ -19,7 +19,7 @@ def create_db():
 @cli.command("seed_db")
 def seed_db():
     db.session.add(
-        BlogEntry(name='Nomnom', message='musu', email='capybara@slay.ca.py')
+        BlogEntry(name='Nomnom', message='musu', email='capybara@slay.ca.py', img_id=1)
     )
     db.session.commit()
     db.session.add(AuthUser(email="flask@204212", name='สมชาย ทรงแบด',
