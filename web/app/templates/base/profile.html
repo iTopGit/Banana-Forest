@@ -128,20 +128,26 @@
 
         <div class="container-fluid" id="change-button" hidden="hidden">
             <p class="d-flex justify-content-center">
-                <button id="cn_btn"
-                    class="btn btn-success is-block is-info is-fullwidth border border-3 border-dark col-6">Change
-                    Name</button>
-            </p>
-            <p class="d-flex justify-content-center">
                 <button id="ce_btn"
                     class="btn btn-success is-block is-info is-fullwidth border border-3 border-dark col-6">Change
                     Email</button>
+            </p>
+            <p class="d-flex justify-content-center">
+                <button id="cn_btn"
+                    class="btn btn-success is-block is-info is-fullwidth border border-3 border-dark col-6">Change
+                    Name</button>
             </p>
             <p class="d-flex justify-content-center">
                 <button id="cp_btn"
                     class="btn btn-success is-block is-info is-fullwidth border border-3 border-dark col-6">Change
                     Password</button>
             </p>
+            <p class="d-flex justify-content-center">
+                <button type="button"
+                    class="btn btn-success is-block is-info is-fullwidth border border-3 border-dark col-6"
+                    onclick="closeForm()">Cancel</button>
+            </p>
+
         </div>
 
 
@@ -161,11 +167,11 @@
                 <p class="m-0 fw-bold"><i class="bi bi-key p-1"></i> Password</p>
                 <input class="input is-large form-control" type="password" name="password" id="password" required>
             </div> <br>
-            <div class="d-flex justify-content-center">
-                <div class="button_name">
-                    <button type="submit" class="btn border border-3 border-dark">Confirm</button>
-                    <button type="button" class="btn border border-3 border-dark" id="closeForm">Cancel</button>
-                </div>
+            <div class="button_name d-flex justify-content-center">
+                <button type="submit"
+                    class="btn btn-success border border-3 border-dark border-dark col-4 mx-1">Confirm</button>
+                <button type="button" class="btn btn-success border border-3 border-dark border-dark col-4 mx-1"
+                    onclick="closeForm()">Cancel</button>
             </div>
         </form>
 
@@ -186,46 +192,46 @@
                 <p class="m-0 fw-bold"><i class="bi bi-key p-1"></i> Password</p>
                 <input class="input is-large form-control" type="password" name="password" id="password" required>
             </div> <br>
-            <div class="d-flex justify-content-center">
-                <div class="button_name">
-                    <button type="submit" class="btn border border-3 border-dark">Confirm</button>
-                    <button type="button" class="btn border border-3 border-dark" id="closeForm">Cancel</button>
-                </div>
+            <div class="button_name d-flex justify-content-center">
+                <button type="submit"
+                    class="btn btn-success border border-3 border-dark border-dark col-4 mx-1">Confirm</button>
+                <button type="button" class="btn btn-success border border-3 border-dark border-dark col-4 mx-1"
+                    onclick="closeForm()">Cancel</button>
             </div>
         </form>
 
 
 
-        <form action="/profile" id="cpForm" method="POST" hidden="hidden">
+        <form action="/profile" id="cpForm" method="POST" hidden>
             <input type="hidden" name="check_edit" id="check_edit" value="edit_pass" required>
             <p id="errorMessage" style="display: none; color: red;">Please check your details and try again.</p>
 
             <div class="control">
                 <p class="m-0 fw-bold"><i class="bi bi-key p-1"></i>New Password</p>
-                <input class="input is-large form-control" type="password" name="new_password" value="" autofocus required>
+                <input class="input is-large form-control" type="password" name="new_password" value="" autofocus
+                    required>
                 <!-- <input class="input is-large form-control" type="text" name="name" value="{{current_user.name}}" autofocus required> -->
                 <!-- <input class="input is-large form-control" type="email" name="email" value="{{current_user.email}}" hidden required> -->
             </div> <br>
             <div class="control">
                 <p class="m-0 fw-bold"><i class="bi bi-key p-1"></i>Confirm Password</p>
-                <input class="input is-large form-control" type="password" name="confirm_password" id="confirm_password" value="" required>
+                <input class="input is-large form-control" type="password" name="confirm_password" id="confirm_password"
+                    value="" required>
                 <!-- <input class="input is-large form-control" type="text" name="name" value="{{current_user.name}}" autofocus required> -->
                 <!-- <input class="input is-large form-control" type="email" name="email" value="{{current_user.email}}" hidden required> -->
             </div> <br>
             <div class="control">
                 <p class="m-0 fw-bold"><i class="bi bi-key p-1"></i>Old Password</p>
-                <input class="input is-large form-control" type="password" name="old_password" id="password" value="" required>
+                <input class="input is-large form-control" type="password" name="old_password" id="password" value=""
+                    required>
             </div> <br>
-            <div class="d-flex justify-content-center">
-                <div class="button_name">
-                    <button type="submit" class="btn border border-3 border-dark">Confirm</button>
-                    <button type="button" class="btn border border-3 border-dark" id="closeForm">Cancel</button>
-                </div>
+            <div class="button_name d-flex justify-content-center">
+                <button type="submit"
+                    class="btn btn-success border border-3 border-dark border-dark col-4 mx-1">Confirm</button>
+                <button type="button" class="btn btn-success border border-3 border-dark border-dark col-4 mx-1"
+                    onclick="closeForm()">Cancel</button>
             </div>
         </form>
-        <!-- <input type="password" name="new_password" value="" required>
-        <input type="password" name="confirm_password" id="confirm_password" value="" required>
-        <input type="password" name="old_password" value="" required> -->
     </div>
 </div>
 
@@ -255,6 +261,10 @@
             $('#change-button').removeAttr('hidden');
             $('#edit-button').attr('hidden', 'hidden');
         }
+    }
+
+    function myFunction() {
+        alert("Hello World!");
     }
 
 
@@ -298,26 +308,29 @@
                 console.log('change password');
             }
         }
+
     });
 
-    $("#cn_btn").click(function () {
-        displayCN()
-    });
+    function closeForm() {
+        $('#user-detail').removeAttr('hidden');
+        $('#edit-button').removeAttr('hidden');
 
-    function displayCN() {
-        $('#user-detail').attr('hidden', 'hidden');
-        $('#change-button').attr('hidden', 'hidden');
+        if (!($('#change-button').attr('hidden'))) {
+            $('#change-button').attr('hidden', 'hidden');
+        }
+
+        if (!($('#ceForm').attr('hidden'))) {
+            $('#ceForm').attr('hidden', 'hidden');
+        }
+
+        if (!($('#cnForm').attr('hidden'))) {
+            $('#cnForm').attr('hidden', 'hidden');
+        }
+
+        if (!($('#cpForm').attr('hidden'))) {
+            $('#cpForm').attr('hidden', 'hidden');
+        }
     }
-
-    $("#cn_btn").click(function () {
-        displayCN()
-    });
-
-    function displayCN() {
-        $('#user-detail').attr('hidden', 'hidden');
-        $('#change-button').attr('hidden', 'hidden');
-    }
-
 
 
     openFormButton.addEventListener("click", () => {
