@@ -182,8 +182,9 @@ def update_like():
 @app.route('/profile', methods=('GET', 'POST'))
 @login_required
 def profile():
+    app.logger.debug(check_login)
     if check_login == 'google':
-        flash("This is Google login")
+        flash("this_is_google_login")
     else:
         if request.method == 'POST':
             if (request.form['check_edit'] == 'edit_name'):
@@ -232,8 +233,6 @@ def profile():
                 db.session.commit()
 
                 flash("Password updated successfully.")
-        
-            
     return render_template('base/profile.html')
 
 
@@ -367,6 +366,8 @@ def google():
 
 @app.route('/google/auth/')
 def google_auth():
+    global check_login
+    check_login = 'google'
     token = oauth.google.authorize_access_token()
     app.logger.debug(str(token))
 
