@@ -173,10 +173,10 @@ def upload():
 @app.route('/profile', methods=('GET', 'POST'))
 @login_required
 def profile():
-    if request.method == 'POST':
-        if check_login == 'not_google':
-            flash("This is Google login")
-        else:
+    if check_login == 'google':
+        flash("This is Google login")
+    else:
+        if request.method == 'POST':
             if (request.form['check_edit'] == 'edit_name'):
                 current_password = request.form['password']
                 new_name = request.form['name']
