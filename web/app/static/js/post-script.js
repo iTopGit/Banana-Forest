@@ -20,7 +20,7 @@ $(document).ready(function () {
 $("#PostForm").submit(function (event) {
   // prevent default html form submission action
   event.preventDefault();
-    console.log("in")
+  console.log("in");
   // pack the inputs into a dictionary
   var formData = {};
   $(":input").each(function () {
@@ -68,6 +68,7 @@ async function tweet_table(blog_data) {
     date_updated,
     owner_id,
     img_id,
+    like,
   }) {
     var d1 = new Date(date_created);
     var d2 = new Date(date_updated);
@@ -91,8 +92,7 @@ async function tweet_table(blog_data) {
     let name = user_id["name"];
     let email = user_id["email"];
     let avatar_url = user_id["avatar_url"];
-
-    console.log(name, email, avatar_url);
+    console.log(like);
 
     return post_blog(
       id,
@@ -105,7 +105,8 @@ async function tweet_table(blog_data) {
       post_time,
       avatar_url,
       owner_id,
-      current_id
+      current_id,
+      like
     );
   }
   const tweet = await Promise.all(data.tweet.map(createTweetHTML));
@@ -132,8 +133,14 @@ function post_blog(
   post_time,
   avatar_url,
   owner_id,
-  current_id
+  current_id,
+  like
 ) {
+    // console.log(typeof (like));
+  let like_val = get_val(like, owner_id);
+  let like_check = check_color(like, owner_id);
+//   console.log("like_check : " + like_check);
+//   console.log("like_val : " + like_val);
   return `
     <div class="tweet">
     <div class="row">
@@ -190,10 +197,17 @@ function post_blog(
         <div class="row text-muted">
             
             <div class="col-md-2">
-            <span id = "retweet${id}" class="fi fi-sr-arrows-retweet" onclick="retweet_blog(${id})"></span>
+
+            <span id = "retweet${id}" class="fi fi-sr-arrows-retweet" style="color: rgb(108, 117, 125);" onclick="retweet_blog(${id})"></span>
             </div>
             <div class="col-md-2">
-            <span id = "like${id}" class="fi fi-ss-heart" onclick="like_blog(${id})"></span>
+            ${
+              like_check
+                ? `<span id = "like${id}" class="fi fi-ss-heart" style="color: red;" onclick="like_blog(${id})">
+                ${like_val}</span>`
+                : `
+            <span id = "like${id}" class="fi fi-ss-heart"  onclick="like_blog(${id})">${like_val}</span>`
+            }
             </div>
             <div class="col-md-2">
             <a href = "mailto: ${email}"><i class="fi fi-sr-envelope-open" ></i></a>
@@ -278,20 +292,22 @@ function like_blog(id) {
   if (color === "red") {
     state = false;
     document.getElementById("like" + id).style.color = "#6c757d";
+    document.getElementById("like" + id).innerHTML -= 1;
+    fetch_like(state, id);
     return;
   }
-
   document.getElementById("like" + id).style.color = "red";
-
+  
   document.getElementById("like" + id).disabled = true;
   setTimeout(() => {
     document.getElementById("like" + id).disabled = false;
   }, 1000);
-  fetch_like(state);
+  document.getElementById("like" + id).innerHTML = parseInt(document.getElementById("like" + id).innerHTML) + 1;
+  fetch_like(state, id);
 }
 
-function fetch_like(state) {
-  const data = { state: state };
+function fetch_like(state, id) {
+  const data = { state: state, blog_id: id };
 
   fetch("/update_like", {
     method: "POST",
@@ -320,4 +336,25 @@ function retweet_blog(id) {
   } else {
     document.getElementById("retweet" + id).style.color = "green";
   }
+}
+
+function get_val(array, id) {
+  let num = 0;
+  try {
+    num = array.length;
+  } catch (error) {
+  }
+
+  return num;
+}
+function check_color(array, id) {
+  let check = false;
+    // console.log(id)
+  try {
+    check = array.includes(id);
+    // console.log(check)
+  } catch (error) {
+    // array is not a valid array
+  }
+  return check;
 }

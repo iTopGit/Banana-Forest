@@ -25,7 +25,6 @@ class BlogEntry(db.Model, SerializerMixin):
         self.date_updated = datetime.datetime.now()
         
     def like_update(self, like):
-        self.like += like
+        self.like = like
         
-    def like_remove(self, item):
-        self.like.remove(item)
+    
