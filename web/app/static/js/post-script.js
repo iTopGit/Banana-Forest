@@ -20,7 +20,7 @@ $(document).ready(function () {
 $("#PostForm").submit(function (event) {
   // prevent default html form submission action
   event.preventDefault();
-
+    console.log("in")
   // pack the inputs into a dictionary
   var formData = {};
   $(":input").each(function () {
@@ -176,12 +176,11 @@ function post_blog(
         }
         ${
           message !== ``
-            ? ``
-            : `<div class="tweet-text" id ="text${id}">${message}</div>`
+            ? `<div class="tweet-text" id ="text${id}">${message}</div>`
+            : ``
         }
         ${
           img_id !== "-1"
-          
             ? `<div class="tweet-media">
                 <img src="/image/${img_id}" alt="Image">
                 </div>`
@@ -274,23 +273,51 @@ function report() {
 }
 
 function like_blog(id) {
-    let color = document.getElementById("like"+id).style.color
-    if (color === "red") {
-      document.getElementById("like"+id).style.color = "#6c757d"; 
-  
-    }else{
-      document.getElementById("like"+id).style.color = "red"; 
-  
-    }
+  let color = document.getElementById("like" + id).style.color;
+  let state = true;
+  if (color === "red") {
+    state = false;
+    document.getElementById("like" + id).style.color = "#6c757d";
+    return;
   }
-  
-  function retweet_blog(id) {
-    let color = document.getElementById("retweet"+id).style.color
-    if (color === "green") {
-      document.getElementById("retweet"+id).style.color = "#6c757d"; 
-  
-    }else{
-      document.getElementById("retweet"+id).style.color = "green"; 
-  
-    }
+
+  document.getElementById("like" + id).style.color = "red";
+
+  document.getElementById("like" + id).disabled = true;
+  setTimeout(() => {
+    document.getElementById("like" + id).disabled = false;
+  }, 1000);
+  fetch_like(state);
+}
+
+function fetch_like(state) {
+  const data = { state: state };
+
+  fetch("/update_like", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
+    .then((response) => {
+      if (response.ok) {
+        console.log("Like updated");
+      } else {
+        console.error("Error updating like:", response.statusText);
+      }
+    })
+    .catch((error) => {
+      // There was a network error
+      console.error("Network error:", error);
+    });
+}
+
+function retweet_blog(id) {
+  let color = document.getElementById("retweet" + id).style.color;
+  if (color === "green") {
+    document.getElementById("retweet" + id).style.color = "#6c757d";
+  } else {
+    document.getElementById("retweet" + id).style.color = "green";
   }
+}

@@ -151,23 +151,32 @@ def db_connection():
         return '<h1>db is broken.</h1>' + str(e)
 
 
-@app.route('/upload', methods=["POST"])
-def upload():
-    pic = request.files['pic']['data']
-    if not pic:
-        return 'No pic uploaded!', 400
+@app.route('/update_like', methods=["POST"])
+def update_like():
+    data = request.json
 
-    filename = secure_filename(pic.filename)
-    mimetype = pic.mimetype
-    if not filename or not mimetype:
-        return 'Bad upload!', 400
+    id = current_user.id
 
-    img = Img(img=pic.read(), name=filename, mimetype=mimetype)
+    state = data.get('state')
 
-    db.session.add(img)
+    entry = BlogEntry.query.get(id)
+
+    if not entry:
+        return 'BlogEntry not found', 404
+    
+    # If the state is True, add the current user's ID to the like field
+    if state:
+        entry.like_update(id)
+    else:
+        try:
+            entry.like_remove(id)
+        except ValueError:
+            return 'Item not found in like field', 400
+
     db.session.commit()
 
-    return 'Img Uploaded!', 200
+    return 'Like updated', 200
+
 
 
 @app.route('/profile', methods=('GET', 'POST'))

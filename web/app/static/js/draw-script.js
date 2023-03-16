@@ -21,8 +21,8 @@ canvas.style.backgroundColor = "white";
 const ctx = canvas.getContext("2d");
 ctx.lineWidth = lineW;
 ctx.lineCap = "round";
-ctx.fillStyle = "#FFFFFF";
-canvas.style.backgroundColor = "#FFFFFF";
+ctx.fillStyle = "#ffffff";
+// canvas.style.backgroundColor = "#FFFFFF";
 
 var theInput = document.getElementById("favcolor");
 let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
