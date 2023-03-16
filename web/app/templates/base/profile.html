@@ -118,8 +118,8 @@
 
         <div class="container-fluid" id="edit-button">
             <p class="d-flex justify-content-center">
-                <button id="edit_btn"
-                    class="btn btn-success is-block is-info is-fullwidth border border-3 border-dark col-6">
+                <button class="btn btn-success is-block is-info is-fullwidth border border-3 border-dark col-6"
+                    onclick="displayChange()">
                     Edit Profile</button>
             </p>
         </div>
@@ -128,19 +128,19 @@
 
         <div class="container-fluid" id="change-button" hidden="hidden">
             <p class="d-flex justify-content-center">
-                <button id="ce_btn"
-                    class="btn btn-success is-block is-info is-fullwidth border border-3 border-dark col-6">Change
-                    Email</button>
+                <button class="btn btn-success is-block is-info is-fullwidth border border-3 border-dark col-6"
+                    onclick="displayCE()">
+                    Change Email</button>
             </p>
             <p class="d-flex justify-content-center">
-                <button id="cn_btn"
-                    class="btn btn-success is-block is-info is-fullwidth border border-3 border-dark col-6">Change
-                    Name</button>
+                <button class="btn btn-success is-block is-info is-fullwidth border border-3 border-dark col-6"
+                    onclick="displayCN()">
+                    Change Name</button>
             </p>
             <p class="d-flex justify-content-center">
-                <button id="cp_btn"
-                    class="btn btn-success is-block is-info is-fullwidth border border-3 border-dark col-6">Change
-                    Password</button>
+                <button class="btn btn-success is-block is-info is-fullwidth border border-3 border-dark col-6"
+                    onclick="displayCP()">
+                    Change Password</button>
             </p>
             <p class="d-flex justify-content-center">
                 <button type="button"
@@ -252,9 +252,6 @@
     const errorMessageOldPass = document.getElementById("errorMessage_oldpass");
     const errorMessageConfirmPass = document.getElementById("errorMessage_confirmpass");
 
-    $("#edit-button").click(function () {
-        displayChange()
-    });
 
     function displayChange() {
         if ($('#change-button').attr('hidden')) {
@@ -263,53 +260,35 @@
         }
     }
 
-    function myFunction() {
-        alert("Hello World!");
+    function displayCE() {
+        $('#user-detail').attr('hidden', 'hidden');
+        $('#change-button').attr('hidden', 'hidden');
+
+        if ($('#ceForm').attr('hidden')) {
+            $('#ceForm').removeAttr('hidden');
+        }
     }
 
+    function displayCN() {
+        $('#user-detail').attr('hidden', 'hidden');
+        $('#change-button').attr('hidden', 'hidden');
 
-    $(document).ready(function () {
-
-        $("#ce_btn").click(function () {
-            displayCE();
-        });
-        function displayCE() {
-            $('#user-detail').attr('hidden', 'hidden');
-            $('#change-button').attr('hidden', 'hidden');
-
-            if ($('#ceForm').attr('hidden')) {
-                $('#ceForm').removeAttr('hidden');
-                console.log('change email');
-            }
+        if ($('#cnForm').attr('hidden')) {
+            $('#cnForm').removeAttr('hidden');
+            console.log('change name');
         }
+    }
 
-        $("#cn_btn").click(function () {
-            displayCN();
-        });
-        function displayCN() {
-            $('#user-detail').attr('hidden', 'hidden');
-            $('#change-button').attr('hidden', 'hidden');
+    function displayCP() {
+        $('#user-detail').attr('hidden', 'hidden');
+        $('#change-button').attr('hidden', 'hidden');
 
-            if ($('#cnForm').attr('hidden')) {
-                $('#cnForm').removeAttr('hidden');
-                console.log('change name');
-            }
+        if ($('#cpForm').attr('hidden')) {
+            $('#cpForm').removeAttr('hidden');
+            console.log('change password');
         }
+    }
 
-        $("#cp_btn").click(function () {
-            displayCP();
-        });
-        function displayCP() {
-            $('#user-detail').attr('hidden', 'hidden');
-            $('#change-button').attr('hidden', 'hidden');
-
-            if ($('#cpForm').attr('hidden')) {
-                $('#cpForm').removeAttr('hidden');
-                console.log('change password');
-            }
-        }
-
-    });
 
     function closeForm() {
         $('#user-detail').removeAttr('hidden');
