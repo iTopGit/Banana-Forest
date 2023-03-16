@@ -15,7 +15,7 @@ function removeItem(id) {
 }
 $(document).ready(function () {
     (function () {
-        $.getJSON("post", tweet_table);
+        $.getJSON("post_db", tweet_table);
     })();
 });
 $("#PostForm").submit(function (event) {

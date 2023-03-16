@@ -75,10 +75,10 @@ def index():
 
             db.session.commit()
 
-        return db_post()
+        # return db_post()
     return render_template('base/index.html')
 
-@app.route("/post")
+@app.route("/post_db")
 def db_post():
     post = []
     db_post = BlogEntry.query.all()
