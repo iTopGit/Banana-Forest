@@ -67,12 +67,17 @@ async function tweet_table(blog_data) {
     date_created,
     date_updated,
     owner_id,
+    img_id,
   }) {
-    const date_full = Date(date_created + "UTC");
-    let date_post = cal_minutes(date_created);
-    let date_edit = cal_minutes(date_updated);
-    let oldDate = new Date(date_created);
-    let editDate = new Date(date_updated);
+    var d1 = new Date(date_created);
+    var d2 = new Date(date_updated);
+    let post_time = "";
+    let current_id = document.getElementById("id_user").innerHTML;
+    if (d1.getUTCSeconds() === d2.getUTCSeconds()) {
+      post_time = diff_minutes(date_created);
+    } else {
+      post_time = diff_minutes(date_updated);
+    }
     let user_id;
 
     try {
@@ -88,28 +93,20 @@ async function tweet_table(blog_data) {
     let avatar_url = user_id["avatar_url"];
 
     console.log(name, email, avatar_url);
-    if (oldDate.getUTCSeconds() === editDate.getUTCSeconds()) {
-      return post_blog(
-        id,
-        name,
-        message,
-        email,
-        date_post,
-        date_full,
-        avatar_url
-      );
-    } else {
-      return edit_Blog(
-        id,
-        name,
-        message,
-        email,
-        date_post,
-        date_edit,
-        date_full,
-        avatar_url
-      );
-    }
+
+    return post_blog(
+      id,
+      name,
+      message,
+      img_id,
+      email,
+      date_created,
+      date_updated,
+      post_time,
+      avatar_url,
+      owner_id,
+      current_id
+    );
   }
   const tweet = await Promise.all(data.tweet.map(createTweetHTML));
 
@@ -124,104 +121,87 @@ async function tweet_table(blog_data) {
   });
 }
 
-function post_blog(id, name, message, email, date_post, date_full, avatar_url) {
-  return `<div class="row" id="post-tweet">
-        <div class="col-md-2 text-center" id="picture">
-            <img class="tw-user-medium rounded-circle" id="avatar_url${id}" src="${avatar_url}" alt="">
-        </div>
-        <div class="col-md-10" id="blog-data">
-            <div class="row tweet-info">
-                <div class="col-md-auto">
-                    <span class="twitter-id" id="id-blog" hidden="hidden">${id}</span>
-                    <span class="name" id="name${id}">${name}</span>
-                    <span class="email" id="email${id}"> ${email}</span>
-                    <span class="tweet-age" data-text="${date_full}"> · ${date_post}</span>
-                </div>
-                <div class="col tweet-arrow text-muted">
-                    <div class="dropdown" >
-                    <i class="fa-solid fa-ellipsis float-right" onclick="showDropdownMenu(event)"></i>
-                    <div class="dropdown-menu" id ="dropdown_item" style="margin-left:100%;">
-                        ${
-                          usr_email === email
-                            ? `<a class="dropdown-item" href="javascript:void(0) "onclick="prePopulateForm(${id})" >
-                                <i class="fa-solid fa-pen" ></i>
-                                edit
-                            </a>
-                            <a class="dropdown-item" href="javascript:void(0)" onclick="removeItem(${id})">
-                                <i class="fa-solid fa-trash"></i>
-                                delete
-                            </a>`
-                            : `<a id="sent_mail" class="dropdown-item" href="mailto: ${email}">
-                                <i class="fa-solid fa-envelope"></i>
-                                sent mail
-                            </a>`
-                        }
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-auto" id="message${id}">${message}</div>               
-        </div>
-        <div class="row text-muted">
-            <div class="icon">
-                
-            </div>
-        </div>
-        
-    </div>`;
-}
-
-function edit_Blog(
+function post_blog(
   id,
   name,
   message,
+  img_id,
   email,
-  date_post,
-  date_edit,
-  date_full,
-  avatar_url
+  date_created,
+  date_updated,
+  post_time,
+  avatar_url,
+  owner_id,
+  current_id
 ) {
-  return `<div class="row" id="post-tweet">
-        <div class="col-md-2 text-center" id="picture">
-            <img class="tw-user-medium rounded-circle" id="avatar_url${id}" src="${avatar_url}" alt="">
+  return `
+    <div class="tweet">
+    <div class="row">
+        <div class="col-md-2 text-center">
+        <img class="tw-user-medium rounded-circle" src="${avatar_url}"/>
         </div>
-        <div class="col-md-10" id="blog-data">
-            <div class="row tweet-info">
-                <div class="col-md-auto">
-                    <span class="twitter-id" id="id-blog" hidden="hidden">${id}</span>
-                    <span class="name" id="name${id}">${name}</span>
-                    <span class="email" id="email${id}">${email}</span>
-                    <span class="tweet-age" data-text="${date_full} (Edited ${date_edit} ago)"> · ${date_post} (edited)</span>
-                    </div>
-                <div class="col tweet-arrow text-muted">
-                <div class="dropdown" >
-                    <i class="fa-solid fa-ellipsis float-right" onclick="showDropdownMenu(event)"></i>
-                    <div class="dropdown-menu" id ="dropdown_item" style="margin-left:100%">
-                        ${
-                          usr_email === email
-                            ? `<a class="dropdown-item" href="javascript:void(0) "onclick="prePopulateForm(${id})" >
-                                <i class="fa-solid fa-pen" ></i>
-                                edit
-                            </a>
-                            <a class="dropdown-item" href="javascript:void(0)" onclick="removeItem(${id})">
-                                <i class="fa-solid fa-trash"></i>
-                                delete
-                            </a>`
-                            : `<a id="sent_mail" class="dropdown-item" href="mailto: ${email}">
-                                <i class="fa-solid fa-envelope"></i>
-                                sent mail
-                            </a>`
-                        }
-                        </div>
-                    </div>
-                </div>
+        <div class="col-md-10">
+        <div class="row tweet-info">
+            <div class="col-md-auto">
+            <span class="tweet-username" id ="name${id}">${name}</span>
+            <span class="tweet-usertag text-muted" id ="email${id}">@${email}</span>-
+            <span class="tweet-age text-muted" id ="time${id}">${post_time}</span>
             </div>
-            <div class="col-md-auto" id="message${id}">${message}</div>               
+            <div class="col tweet-arrow text-muted">
+            <i class="fi fi-bs-menu-dots-vertical float-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+            <div class="dropdown-menu">
+            ${
+              owner_id != current_id
+                ? `<button  class="dropdown-item" id="editallButton" onclick="like_blog(${id})">Like</button>
+                <button  class="dropdown-item" id="editallButton" onclick="retweet_blog(${id})">Retweet</button>
+                <div class="dropdown-divider"></div>
+                <button class="dropdown-item" id="editallButton" onclick="window.open('https://www.youtube.com/watch?v=tG1otG8ncFY&ab_channel=Hemsty', '_blank')">Capyspin</button>
+                `
+                : `<button  class="dropdown-item" id="editallButton" href="#" data-target="#popup-tweet" data-toggle="modal" value="${id}" onclick="prePopulateForm(this.value)">edit</button>
+                <div class="dropdown-divider"></div>
+                <button  class="dropdown-item" id="deleteButton" href="#" value="${id}" onclick="removeItem(this.value)">Delete</button>`
+            }
+
+                <!-- <div class="dropdown-divider"></div> -->
+                <!-- <button class="dropdown-item" id="editButton" value="${id}" onclick="changeDivToTextArea(this.value)">Edit</button > --!>
+                
+            </div>
+            </div>
         </div>
+        
+        ${
+          date_created === date_updated
+            ? ``
+            : `<div>[ Edited <i class="fi fi-rr-pencil"></i> ]<br></div>`
+        }
+        ${
+          message !== ``
+            ? ``
+            : `<div class="tweet-text" id ="text${id}">${message}</div>`
+        }
+        ${
+          img_id !== "-1"
+          
+            ? `<div class="tweet-media">
+                <img src="/image/${img_id}" alt="Image">
+                </div>`
+            : ``
+        }
+        
         <div class="row text-muted">
-            <div class="icon">
+            
+            <div class="col-md-2">
+            <span id = "retweet${id}" class="fi fi-sr-arrows-retweet" onclick="retweet_blog(${id})"></span>
+            </div>
+            <div class="col-md-2">
+            <span id = "like${id}" class="fi fi-ss-heart" onclick="like_blog(${id})"></span>
+            </div>
+            <div class="col-md-2">
+            <a href = "mailto: ${email}"><i class="fi fi-sr-envelope-open" ></i></a>
             </div>
         </div>
+        </div>
+    </div>
     </div>`;
 }
 
@@ -246,22 +226,40 @@ function showDropdownMenu(event) {
   });
 }
 
-function cal_minutes(date_create) {
-  let now = new Date();
-  let created = new Date(date_create + " UTC");
-  let diff = (now.getTime() - created) / 1000 / 60; // convert to minutes
-  diff = Math.abs(Math.round(diff)); // round and get absolute value
-
-  let result;
-  if (diff >= 60 && diff < 1440) {
-    result = Math.round(diff / 60) + " hours";
-  } else if (diff >= 1440) {
-    result = new Date(date_create).toLocaleDateString().split(",")[0];
-  } else if (diff <= 1) {
-    result = "now";
+function diff_minutes(dt1) {
+  console.log("date in : " + dt1);
+  let daynow = new Date();
+  let date_b4 = new Date(dt1 + " UTC");
+  //console.log("daynow : "+ daynow)
+  //console.log("min : "+ date_b4)
+  let diff = (daynow.getTime() - date_b4) / 1000;
+  diff /= 60;
+  let result = Math.abs(Math.round(diff));
+  if (result > 60) {
+    result /= 60;
+    result = Math.abs(Math.round(result));
+    if (result > 24) {
+      //console.log("in date");
+      result /= 24;
+      result = Math.abs(Math.round(result));
+      if (result <= 7) {
+        result += "d";
+      } else {
+        result = new Date(dt1).toLocaleDateString("en-GB");
+      }
+    } else {
+      //console.log("in hour");
+      result += "h";
+    }
   } else {
-    result = diff + " minutes";
+    if (diff < 1) {
+      result = "Just Tweet";
+    } else {
+      result += "min";
+    }
+    //console.log("in min");
   }
+  //console.log(result);
   return result;
 }
 
@@ -274,3 +272,25 @@ function prePopulateForm(id) {
 function report() {
   confirm("Do you want to report this pose?");
 }
+
+function like_blog(id) {
+    let color = document.getElementById("like"+id).style.color
+    if (color === "red") {
+      document.getElementById("like"+id).style.color = "#6c757d"; 
+  
+    }else{
+      document.getElementById("like"+id).style.color = "red"; 
+  
+    }
+  }
+  
+  function retweet_blog(id) {
+    let color = document.getElementById("retweet"+id).style.color
+    if (color === "green") {
+      document.getElementById("retweet"+id).style.color = "#6c757d"; 
+  
+    }else{
+      document.getElementById("retweet"+id).style.color = "green"; 
+  
+    }
+  }

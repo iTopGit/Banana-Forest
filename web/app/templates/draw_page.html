@@ -19,6 +19,7 @@
   <title>Drawing App 🎨</title>
   <link rel="stylesheet" href="static/css/draw-page.css">
 
+  
 </head>
 
 <body>
@@ -165,17 +166,18 @@
         <div class="modal-body">
           <form enctype="multipart/form-data" method="POST">
             <img id="img" class="w-100" style="border-width:thin;border-style:solid;border-color:Black;"></img>
-          <textarea id="message" class="form-control" name="message" placeholder="Type some thing..."></textarea>
-          <input id="img-input" type="text" name="pic" hidden="hidden" />
+            <textarea id="message" class="form-control" name="message" placeholder="Type some thing..."></textarea>
+            <input id="img-input" type="text" name="pic" hidden="hidden" />
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+              <button class="btn btn-primary save">Save</button>
+              <input class="btn btn-primary" type="submit" value="Post" />
+            </div>
           </form>
           
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
-          <button class="btn btn-primary save">Save</button>
-          <input class="btn btn-primary" type="submit" value="Post" />
-        </div>
+        
       </div>
     </div>
   </div>
