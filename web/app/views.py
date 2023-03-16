@@ -140,7 +140,7 @@ def draw_page():
         db.session.add(entry)
         db.session.commit()
 
-        return 'Img Uploaded!', 200
+        return redirect(url_for('index'))
     return render_template('draw_page.html')
 
 

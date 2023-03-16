@@ -30,9 +30,13 @@ img.tw-user-small {
     border: 3px solid #008000;
 } 
 
-#post-tweet {
+.tweet {
     background-color: #9ACD32;
     padding: 2%;
     margin: 2%;
+    border: 3px solid  #008000;
+}
+
+.tweet-media {
     border: 3px solid  #008000;
 }
