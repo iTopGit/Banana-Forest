@@ -261,7 +261,7 @@ def signup():
     if request.method == 'POST':
         result = request.form.to_dict()
         app.logger.debug(str(result))
-
+        cf_password = request.form.get('cf_password')
         validated = True
         validated_dict = {}
         valid_keys = ['email', 'name', 'password']
@@ -293,7 +293,9 @@ def signup():
                 # page so user can try again
                 flash('Email address already exists')
                 return redirect(url_for('signup'))
-
+            if cf_password != password:
+                flash('Passwords do not match, Please try again')
+                return redirect(url_for('signup'))
             # create a new user with the form data. Hash the password so
             # the plaintext version isn't saved.
             app.logger.debug("preparing to add")
