@@ -26,13 +26,13 @@ def seed_db():
         password=generate_password_hash('1234', method='sha256'),
         avatar_url='https://ui-avatars.com/api/?name=\สมชาย+ทรงแบด&background=83ee03&color=fff'))
     db.session.commit()
-    db.session.add(
-       PrivateContact(firstname='ส้มโอ', lastname='โอเค',
-                      phone='081-111-1112', owner_id=1))
+    db.session.add(AuthUser(email="cap@suit", name='suit',
+        password=generate_password_hash('1234', method='sha256'),
+        avatar_url='static\img\capybara_suit.jpg'))
     db.session.commit()
-    db.session.add(
-        Contact(firstname='สมชาย', lastname='ทรงแบด', phone='081-111-1111')
-    )
+    db.session.add(AuthUser(email="cap@smile", name='smile',
+        password=generate_password_hash('1234', method='sha256'),
+        avatar_url='static\img\capybara_smile.jpg'))
     db.session.commit()
 
 
