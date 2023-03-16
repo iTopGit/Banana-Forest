@@ -119,8 +119,8 @@
         <div class="container-fluid" id="edit-button">
             <p class="d-flex justify-content-center">
                 <button id="edit_btn"
-                    class="btn btn-success is-block is-info is-fullwidth border border-3 border-dark col-6">Edit
-                    Profile</button>
+                    class="btn btn-success is-block is-info is-fullwidth border border-3 border-dark col-6">
+                    Edit Profile</button>
             </p>
         </div>
 
@@ -146,17 +146,16 @@
 
 
 
-
-
-        <form action="/profile" id="cnForm" method="POST" hidden="hidden">
+        <form action="/profile" id="ceForm" method="POST" hidden="hidden">
             <input type="hidden" name="check_edit" id="check_edit" value="edit_name" required>
             <p id="errorMessage" style="display: none; color: red;">Please check your details and try again.</p>
-            
 
             <div class="control">
-                <p class="m-0 fw-bold"><i class="bi bi-person p-1"></i>Name</p>
-                <input class="input is-large form-control" type="text" name="name" value="{{current_user.name}}" autofocus required>
-                <input type="email" name="email" value="{{current_user.email}}"  hidden required>
+                <p class="m-0 fw-bold"><i class="bi bi-envelope p-1"></i>Email</p>
+                <input class="input is-large form-control" type="text" name="name" value="{{current_user.name}}" hidden
+                    required>
+                <input class="input is-large form-control" type="email" name="email" value="{{current_user.email}}"
+                    autofocus required>
             </div> <br>
             <div class="control">
                 <p class="m-0 fw-bold"><i class="bi bi-key p-1"></i> Password</p>
@@ -169,6 +168,64 @@
                 </div>
             </div>
         </form>
+
+
+
+        <form action="/profile" id="cnForm" method="POST" hidden="hidden">
+            <input type="hidden" name="check_edit" id="check_edit" value="edit_name" required>
+            <p id="errorMessage" style="display: none; color: red;">Please check your details and try again.</p>
+
+            <div class="control">
+                <p class="m-0 fw-bold"><i class="bi bi-person p-1"></i>Name</p>
+                <input class="input is-large form-control" type="text" name="name" value="{{current_user.name}}"
+                    autofocus required>
+                <input class="input is-large form-control" type="email" name="email" value="{{current_user.email}}"
+                    hidden required>
+            </div> <br>
+            <div class="control">
+                <p class="m-0 fw-bold"><i class="bi bi-key p-1"></i> Password</p>
+                <input class="input is-large form-control" type="password" name="password" id="password" required>
+            </div> <br>
+            <div class="d-flex justify-content-center">
+                <div class="button_name">
+                    <button type="submit" class="btn border border-3 border-dark">Confirm</button>
+                    <button type="button" class="btn border border-3 border-dark" id="closeForm">Cancel</button>
+                </div>
+            </div>
+        </form>
+
+
+
+        <form action="/profile" id="cpForm" method="POST" hidden="hidden">
+            <input type="hidden" name="check_edit" id="check_edit" value="edit_pass" required>
+            <p id="errorMessage" style="display: none; color: red;">Please check your details and try again.</p>
+
+            <div class="control">
+                <p class="m-0 fw-bold"><i class="bi bi-key p-1"></i>New Password</p>
+                <input class="input is-large form-control" type="password" name="new_password" value="" autofocus required>
+                <!-- <input class="input is-large form-control" type="text" name="name" value="{{current_user.name}}" autofocus required> -->
+                <!-- <input class="input is-large form-control" type="email" name="email" value="{{current_user.email}}" hidden required> -->
+            </div> <br>
+            <div class="control">
+                <p class="m-0 fw-bold"><i class="bi bi-key p-1"></i>Confirm Password</p>
+                <input class="input is-large form-control" type="password" name="confirm_password" id="confirm_password" value="" required>
+                <!-- <input class="input is-large form-control" type="text" name="name" value="{{current_user.name}}" autofocus required> -->
+                <!-- <input class="input is-large form-control" type="email" name="email" value="{{current_user.email}}" hidden required> -->
+            </div> <br>
+            <div class="control">
+                <p class="m-0 fw-bold"><i class="bi bi-key p-1"></i>Old Password</p>
+                <input class="input is-large form-control" type="password" name="old_password" id="password" value="" required>
+            </div> <br>
+            <div class="d-flex justify-content-center">
+                <div class="button_name">
+                    <button type="submit" class="btn border border-3 border-dark">Confirm</button>
+                    <button type="button" class="btn border border-3 border-dark" id="closeForm">Cancel</button>
+                </div>
+            </div>
+        </form>
+        <!-- <input type="password" name="new_password" value="" required>
+        <input type="password" name="confirm_password" id="confirm_password" value="" required>
+        <input type="password" name="old_password" value="" required> -->
     </div>
 </div>
 
@@ -200,36 +257,45 @@
         }
     }
 
-    $("#cn_btn").click(function () {
-        console.log('Clicked');
-        displayCN();
-        console.log('A');
-    });
-
-    function displayCN() {
-        console.log('displayCN() called');
-        $('#user-detail').attr('hidden', 'hidden');
-        $('#change-button').attr('hidden', 'hidden');
-
-        if ($('#cnForm').attr('hidden')) {
-            $('#cnForm').removeAttr('hidden');
-            console.log('change name');
-        }
-    }
 
     $(document).ready(function () {
+
+        $("#ce_btn").click(function () {
+            displayCE();
+        });
+        function displayCE() {
+            $('#user-detail').attr('hidden', 'hidden');
+            $('#change-button').attr('hidden', 'hidden');
+
+            if ($('#ceForm').attr('hidden')) {
+                $('#ceForm').removeAttr('hidden');
+                console.log('change email');
+            }
+        }
+
         $("#cn_btn").click(function () {
             displayCN();
         });
-
         function displayCN() {
-            console.log('displayCN() called');
             $('#user-detail').attr('hidden', 'hidden');
             $('#change-button').attr('hidden', 'hidden');
 
             if ($('#cnForm').attr('hidden')) {
                 $('#cnForm').removeAttr('hidden');
                 console.log('change name');
+            }
+        }
+
+        $("#cp_btn").click(function () {
+            displayCP();
+        });
+        function displayCP() {
+            $('#user-detail').attr('hidden', 'hidden');
+            $('#change-button').attr('hidden', 'hidden');
+
+            if ($('#cpForm').attr('hidden')) {
+                $('#cpForm').removeAttr('hidden');
+                console.log('change password');
             }
         }
     });

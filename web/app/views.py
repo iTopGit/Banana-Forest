@@ -205,6 +205,7 @@ def profile():
             old_password = request.form.get("old_password")
             new_password = request.form.get("new_password")
             confirm_password = request.form.get("confirm_password")
+            
 
             if not check_password_hash(current_user.password, old_password):
                 flash("Incorrect password, Please try again")
