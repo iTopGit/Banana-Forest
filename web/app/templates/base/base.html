@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="utf-8">
+  <title>Banana Forest</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
     integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
@@ -48,7 +49,7 @@
       {% if current_user.is_authenticated %}
       <img class="tw-user-small rounded-circle" src="{{ current_user.avatar_url }}" alt=""
         style="padding-right:5px; margin-left:auto;">
-      <button class="btn" id="add_tweet" type="button">Tweet</button>
+      <button class="btn" id="add_post" type="button">Tweet</button>
       {% else %}
       <a class="btn" id="btn_lg" href="{{ url_for('login') }}" style="color: black;"><span
           class="fa-solid fa-right-from-bracket"></span> Login</a>

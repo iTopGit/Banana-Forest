@@ -2,11 +2,7 @@
     background-color: #9ACD32;
 }
 
-<<<<<<< HEAD
-/* input[type=text],
-=======
 input[type=text],
->>>>>>> pop-up-post
 input[type=email],
 input[type=password],
 select{
@@ -32,9 +28,6 @@ button {
     font-weight: bold;
     border: 1px solid white;
     padding: 12px 20px;
-<<<<<<< HEAD
-} */
-=======
 }
 .wrapper{
     position: relative;
@@ -122,4 +115,3 @@ button {
     font-size: 1em;
     font-weight: 500;
 }
->>>>>>> pop-up-post

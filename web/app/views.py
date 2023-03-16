@@ -20,7 +20,7 @@ from io import BytesIO
 
 from app.models.image import Img
 from app.models.blogentry import BlogEntry
-from app.models.authuser import AuthUser, PrivateContact
+from app.models.authuser import AuthUser, PosonalPost
 
 
 @login_manager.user_loader
@@ -37,7 +37,7 @@ def index():
         id_ = result.get('id', '')
         validated = True
         validated_dict = dict()
-        validated_dict['img_id'] = -1
+        validated_dict['img_id'] = '-1'
         validated_dict['name'] = current_user.name
         validated_dict['email'] = current_user.email
         validated_dict['avatar_url'] = current_user.avatar_url
@@ -63,13 +63,13 @@ def index():
             if not id_:
                 validated_dict['owner_id'] = current_user.id
                 # entry = BlogEntry(**validated_dict)
-                entry = PrivateContact(**validated_dict)
+                entry = PosonalPost(**validated_dict)
                 app.logger.debug(str(entry))
                 db.session.add(entry)
             # if there is an id_ already: update blogEntry
             else:
                 # blogEntry = BlogEntry.query.get(id_)
-                blogEntry = PrivateContact.query.get(id_)
+                blogEntry = PosonalPost.query.get(id_)
                 if blogEntry.owner_id == current_user.id:
                     blogEntry.update(**validated_dict)
 
@@ -96,7 +96,7 @@ def remove_post():
         result = request.form.to_dict()
         id_ = result.get('id', '')
         try:
-            post = PrivateContact.query.get(id_)
+            post = PosonalPost.query.get(id_)
             if post.owner_id == current_user.id:
                 db.session.delete(post)
             db.session.commit()
@@ -367,50 +367,6 @@ def google_auth():
         password = ''.join(secrets.choice(string.ascii_uppercase + string.digits)
                            for i in range(random_pass_len))
         picture = userinfo['picture']
-        new_user = AuthUser(email=email, name=name,
-                            password=generate_password_hash(
-                                password, method='sha256'),
-                            avatar_url=picture)
-        db.session.add(new_user)
-        db.session.commit()
-        user = AuthUser.query.filter_by(email=email).first()
-    login_user(user)
-    return redirect('/')
-
-
-@app.route('/facebook/')
-def facebook():
-    oauth.register(
-        name='facebook',
-        client_id=app.config['FACEBOOK_CLIENT_ID'],
-        client_secret=app.config['FACEBOOK_CLIENT_SECRET'],
-        access_token_url='https://graph.facebook.com/oauth/access_token',
-        access_token_params=None,
-        authorize_url='https://www.facebook.com/dialog/oauth',
-        authorize_params=None,
-        api_base_url='https://graph.facebook.com/',
-        client_kwargs={'scope': 'email'},
-    )
-    redirect_uri = url_for('facebook_auth', _external=True)
-    return oauth.facebook.authorize_redirect(redirect_uri)
-
-
-@app.route('/facebook/auth/')
-def facebook_auth():
-    token = oauth.facebook.authorize_access_token()
-    app.logger.debug(token)
-    resp = oauth.facebook.get(
-        'https://graph.facebook.com/me?fields=id,name,email,picture{url}')
-    profile = resp.json()
-    email = profile['email']
-
-    user = AuthUser.query.filter_by(email=email).first()
-    if not user:
-        name = profile['name']
-        random_pass_len = 8
-        password = ''.join(secrets.choice(string.ascii_uppercase + string.digits)
-                           for i in range(random_pass_len))
-        picture = profile['picture']['data']['url']
         new_user = AuthUser(email=email, name=name,
                             password=generate_password_hash(
                                 password, method='sha256'),

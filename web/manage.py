@@ -4,7 +4,7 @@ import datetime
 from app import app, db
 from app.models.contact import Contact
 from app.models.blogentry import BlogEntry
-from app.models.authuser import AuthUser, PrivateContact
+from app.models.authuser import AuthUser
 
 cli = FlaskGroup(app)
 
@@ -19,7 +19,7 @@ def create_db():
 @cli.command("seed_db")
 def seed_db():
     db.session.add(
-        BlogEntry(name='Nomnom', message='musu', email='capybara@slay.ca.py', img_id=1)
+        BlogEntry(name='Nomnom', message='musu', email='capybara@slay.ca.py', img_id='-1',avatar_url='https://ui-avatars.com/api/?name=\สมชาย+ทรงแบด&background=83ee03&color=fff')
     )
     db.session.commit()
     
