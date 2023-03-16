@@ -1,14 +1,18 @@
 //Set onscreen canvas and its context
-let onScreenCVS = document.getElementById("onScreen");
+var res = 9 / 16;
+var canvasContainer = document.getElementById("canvas-container");
+let onScreenCVS = document.getElementById("draw_screen");
 let onScreenCTX = onScreenCVS.getContext("2d");
 //improve sharpness
 let ocWidth = onScreenCVS.width;
 let ocHeight = onScreenCVS.height;
 let sharpness = 4;
+var lineW = 5;
 onScreenCVS.width = ocWidth * sharpness;
 onScreenCVS.height = ocHeight * sharpness;
 onScreenCTX.scale(sharpness, sharpness);
-
+onScreenCTX.lineCap = "round";
+onScreenCTX.lineWidth = lineW;
 //Get the undo buttons
 let undoBtn = document.getElementById("undo");
 let redoBtn = document.getElementById("redo");
@@ -23,8 +27,24 @@ let toolsCont = document.querySelector(".tools");
 let offScreenCVS = document.createElement("canvas");
 let offScreenCTX = offScreenCVS.getContext("2d");
 //Set the dimensions of the drawing canvas
-offScreenCVS.width = 32;
-offScreenCVS.height = 32;
+offScreenCVS.width = canvasContainer.offsetWidth*0.9;
+offScreenCVS.height = canvasContainer.width*res;
+
+onScreenCVS.style.backgroundColor = "#ADFF2F";
+var theInput = document.getElementById("favcolor");
+
+theInput.addEventListener(
+  "input",
+  function () {
+    theColor = theInput.value;
+    console.log("the color" + theColor);
+    onScreenCTX.fillStyle = theColor;
+    onScreenCTX.fillRect(0, 0, canvas.width, canvas.height);
+    // body.style.backgroundColor = theColor;
+  },
+  false
+);
+
 
 //Create history stacks for the undo functionality
 let undoStack = [];
@@ -61,10 +81,24 @@ onScreenCVS.addEventListener("mouseout", handleMouseOut);
 undoBtn.addEventListener("click", handleUndo);
 redoBtn.addEventListener("click", handleRedo);
 
-swatch.addEventListener("click", randomizeColor);
+// swatch.addEventListener("click", randomizeColor);
 
 toolsCont.addEventListener("click", handleTools);
-
+//line size
+document.getElementById("ageInputId").oninput = function () {
+  draw = null;
+  lineW = document.getElementById("ageInputId").value;
+  document.getElementById("ageOutputId").innerHTML = lineW;
+  ctx.lineWidth = lineW;
+};
+//line color
+let clrs = document.querySelectorAll(".clr");
+clrs = Array.from(clrs);
+clrs.forEach((clr) => {
+  clr.addEventListener("click", () => {
+    ctx.strokeStyle = clr.dataset.clr;
+  });
+});
 function handleMouseMove(e) {
   let trueRatio = onScreenCVS.offsetWidth / offScreenCVS.width;
   let mouseX = Math.floor(e.offsetX / trueRatio);
@@ -131,7 +165,7 @@ function handleMouseMove(e) {
             y: mouseY,
             // size: brushSize,
             color: { ...brushColor },
-            mode: toolType
+            mode: toolType,
           });
           source = offScreenCVS.toDataURL();
           renderImage();
@@ -187,7 +221,7 @@ function handleMouseDown(e) {
         y: mouseY,
         // size: brushSize,
         color: { ...brushColor },
-        mode: toolType
+        mode: toolType,
       });
       source = offScreenCVS.toDataURL();
       renderImage();
@@ -204,7 +238,7 @@ function handleMouseDown(e) {
         y: mouseY,
         // size: brushSize,
         color: { ...brushColor },
-        mode: toolType
+        mode: toolType,
       });
       source = offScreenCVS.toDataURL();
       renderImage();
@@ -228,7 +262,7 @@ function handleMouseUp(e) {
       endY: mouseY,
       // size: brushSize,
       color: { ...brushColor },
-      mode: toolType
+      mode: toolType,
     });
     source = offScreenCVS.toDataURL();
     renderImage();
@@ -279,7 +313,7 @@ function actionDraw(coordX, coordY, currentColor) {
 }
 
 function actionLine(sx, sy, tx, ty, currentColor, ctx, scale = 1) {
-  ctx.fillStyle = currentColor.color;
+  onScreenCTX.fillStyle = currentColor.color;
   // finds the distance between points
   function lineLength(x1, y1, x2, y2) {
     return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
@@ -293,7 +327,7 @@ function actionLine(sx, sy, tx, ty, currentColor, ctx, scale = 1) {
   let ang = getAngle(tx - sx, ty - sy); // angle of line
   for (let i = 0; i < dist; i++) {
     // for each point along the line
-    ctx.fillRect(
+    onScreenCTX.fillRect(
       Math.round(sx + Math.cos(ang) * i) * scale, // round for perfect pixels
       Math.round(sy + Math.sin(ang) * i) * scale, // thus no aliasing
       scale,
@@ -301,7 +335,7 @@ function actionLine(sx, sy, tx, ty, currentColor, ctx, scale = 1) {
     ); // fill in one pixel, 1x1
   }
   //fill endpoint
-  ctx.fillRect(
+  onScreenCTX.fillRect(
     Math.round(tx) * scale, // round for perfect pixels
     Math.round(ty) * scale, // thus no aliasing
     scale,

@@ -106,12 +106,22 @@
 
       </div>
       <div class="col-8 p-5" id="canvas-container">
+<<<<<<< HEAD
         <canvas class="rounded" id="canvas"></canvas>
+=======
+        <canvas id="draw_screen"></canvas>
+>>>>>>> f6422a9 (draw modal)
       </div>
       <div class="col-2 p-5">
         <div class="container bgcontrol mb-5 rounded">
           <div class="row p-2 py-4 justify-content-center">
             <input type="color" class="form-control form-control-color" id="favcolor" value="#FFFFFF">
+            <div class="tools">
+              <img class="tool" id="pencil" src="./static/img/pencil.png" onclick="changestate('pencil')"></img>
+              <img class="tool" id="line" src="./static/img/l.png" onclick="changestate('line')"></img>
+              <img class="tool" id="fill" src="./static/img/bucket.png" onclick="changestate('fill')"></img>
+              <img class="tool" id="picker" src="./static/img/p.png" onclick="changestate('picker')"></img>
+            </div>
           </div>
         </div>
 
@@ -122,8 +132,19 @@
           <div class="row justify-content-center">
             <button type="button" class="btn btn-primary save  m-1">Save</button>
           </div>
+<<<<<<< HEAD
           <div class="row justify-content-center">
             <button class="btn btn-primary done  m-1" id="done">Done</button>
+=======
+          <div class="row p-2 py-2 justify-content-center">
+            <button class="btn done" id="undo">Undo</button>
+          </div>
+          <div class="row p-2 py-2 justify-content-center">
+            <button class="btn done" id="redo">Redo</button>
+          </div>
+          <div class="row p-2 py-2 justify-content-center">
+            <button class="btn done" id="done">Done</button>
+>>>>>>> f6422a9 (draw modal)
           </div>
         </div>
       </div>
@@ -137,12 +158,16 @@
       <img id="img" style="border-width:thin;border-style:solid;border-color:Black;"></img>
       <form enctype="multipart/form-data" method="POST">
         <input id="img-input" type="text" name="pic" hidden="hidden" />
-        <input type="submit" value="Upload a file" />
+        <textarea  id="message" type="text" name="message" rows="5" cols="80" maxlength="280" />type some thing...</textarea>
+        <br>
+        <input class="btn btn-primary" type="submit" value="Post" />
+        <button class="btn btn-primary save">Save</button>
       </form>
-      <button class="btn btn-primary save">Save</button>
+      
     </div>
   </div>
 
+<<<<<<< HEAD
   <!--<div id="myModal" class="modal"> -->
   <!-- Modal content -->
   <!--<div class="modal-content">
@@ -156,6 +181,8 @@
   </div>
 </div>-->
 
+=======
+>>>>>>> f6422a9 (draw modal)
 </body>
 
 </html>

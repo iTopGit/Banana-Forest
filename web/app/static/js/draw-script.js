@@ -1,12 +1,12 @@
 const body = document.querySelector("body");
 
-var res = 9/16;
+var res = 9 / 16;
 var canvasContainer = document.getElementById("canvas-container");
-const canvas = document.getElementById("canvas")
-canvas.width = canvasContainer.offsetWidth*0.9;
-canvas.height = canvas.width*res;
+const canvas = document.getElementById("draw_screen");
+canvas.width = canvasContainer.offsetWidth * 0.9;
+canvas.height = canvas.width * res;
 
-
+var toolType = "pencil";
 var theColor = "";
 var lineW = 5;
 let points = [];
@@ -18,23 +18,32 @@ let undoList = [];
 let redoList = [];
 
 canvas.style.backgroundColor = "white";
+const ctx = canvas.getContext("2d");
+ctx.lineWidth = lineW;
+ctx.lineCap = "round";
+ctx.fillStyle = "#FFFFFF"
+canvas.style.backgroundColor = "#FFFFFF";
+
 var theInput = document.getElementById("favcolor");
+let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
 theInput.addEventListener(
   "input",
   function () {
     theColor = theInput.value;
     console.log("the color" + theColor);
-    ctx.fillStyle = theColor;
+    // ctx.fillStyle = theColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     // body.style.backgroundColor = theColor;
   },
   false
 );
 
-const ctx = canvas.getContext("2d");
-ctx.lineWidth = lineW;
-ctx.lineCap = "round";
+
+function changestate(state){
+  toolType = state;
+  console.log(state)
+}
 
 document.getElementById("ageInputId").oninput = function () {
   draw = null;
@@ -70,21 +79,28 @@ doneBtn.addEventListener("click", () => {
   let dataUrl = canvas.toDataURL("image/png");
   let img = document.getElementById("img");
   let input_data = document.getElementById("img-input");
-  
+
   img.src = dataUrl;
   input_data.setAttribute("value", dataUrl);
-
 });
 
 canvas.addEventListener("mousedown", (e) => {
   saveState();
-  draw = true;
-
-  let rect = canvas.getBoundingClientRect(); // Get the position of the canvas on the screen
-  let scaleX = canvas.width / rect.width; // Calculate the scale factor for X coordinate
-  let scaleY = canvas.height / rect.height; // Calculate the scale factor for Y coordinate
-  prevX = (e.clientX - rect.left) * scaleX; // Convert the X coordinate to canvas coordinate
-  prevY = (e.clientY - rect.top) * scaleY; // Convert the Y coordinate to canvas coordinate
+  switch (toolType) {
+    case "fill":
+      //do nothing
+      break;
+    default: // Get the position of the canvas on the screen
+      // Calculate the scale factor for X coordinate
+      // Calculate the scale factor for Y coordinate
+      // Convert the X coordinate to canvas coordinate
+      draw = true;
+      let rect = canvas.getBoundingClientRect();
+      let scaleX = canvas.width / rect.width;
+      let scaleY = canvas.height / rect.height;
+      prevX = (e.clientX - rect.left) * scaleX;
+      prevY = (e.clientY - rect.top) * scaleY; // Convert the Y coordinate to canvas coordinate
+  }
 });
 
 canvas.addEventListener("mouseup", (e) => {
@@ -94,29 +110,88 @@ canvas.addEventListener("mouseup", (e) => {
 });
 
 canvas.addEventListener("mousemove", (e) => {
-  if (prevX == null || prevY == null || !draw) {
-    return;
+  let rect = canvas.getBoundingClientRect();
+  let scaleX = canvas.width / rect.width;
+  let scaleY = canvas.height / rect.height;
+  let currentX = (e.clientX - rect.left) * scaleX;
+  let currentY = (e.clientY - rect.top) * scaleY;
+  switch (toolType) {
+    case "fill":
+      let pixelStack = [[Math.floor(currentX), Math.floor(currentY)]];
+      let startColor = getPixelColor(
+        imageData,
+        Math.floor(currentX),
+        Math.floor(currentY)
+      );
+      let replacementColor = getCurrentColor();
+
+      if (startColor === replacementColor) {
+        return;
+      }
+
+      while (pixelStack.length) {
+        let newPos, x, y, pixelPos;
+        newPos = pixelStack.pop();
+        x = newPos[0];
+        y = newPos[1];
+        pixelPos = (y * canvas.width + x) * 4;
+        while (y-- >= 0 && matchStartColor(imageData, pixelPos, startColor)) {
+          pixelPos -= canvas.width * 4;
+        }
+        pixelPos += canvas.width * 4;
+        ++y;
+        let reachLeft = false;
+        let reachRight = false;
+        while (
+          y++ < canvas.height - 1 &&
+          matchStartColor(imageData, pixelPos, startColor)
+        ) {
+          colorPixel(imageData, pixelPos, replacementColor);
+          if (x > 0) {
+            if (matchStartColor(imageData, pixelPos - 4, startColor)) {
+              if (!reachLeft) {
+                pixelStack.push([x - 1, y]);
+                reachLeft = true;
+              }
+            } else if (reachLeft) {
+              reachLeft = false;
+            }
+          }
+          if (x < canvas.width - 1) {
+            if (matchStartColor(imageData, pixelPos + 4, startColor)) {
+              if (!reachRight) {
+                pixelStack.push([x + 1, y]);
+                reachRight = true;
+              }
+            } else if (reachRight) {
+              reachRight = false;
+            }
+          }
+          pixelPos += canvas.width * 4;
+        }
+      }
+      ctx.putImageData(imageData, 0, 0);
+      break;
+
+    default:
+      if (prevX == null || prevY == null || !draw) {
+        return;
+      }
+
+      // Add the current point to the path
+      ctx.beginPath();
+      ctx.moveTo(prevX, prevY);
+      ctx.lineTo(currentX, currentY);
+      ctx.stroke();
+
+      // Smooth the path
+      let midX = (prevX + currentX) / 2;
+      let midY = (prevY + currentY) / 2;
+      ctx.quadraticCurveTo(prevX, prevY, midX, midY);
+
+      prevX = currentX;
+      prevY = currentY;
   }
-
-  let rect = canvas.getBoundingClientRect(); // Get the position of the canvas on the screen
-  let scaleX = canvas.width / rect.width; // Calculate the scale factor for X coordinate
-  let scaleY = canvas.height / rect.height; // Calculate the scale factor for Y coordinate
-  let currentX = (e.clientX - rect.left) * scaleX; // Convert the X coordinate to canvas coordinate
-  let currentY = (e.clientY - rect.top) * scaleY; // Convert the Y coordinate to canvas coordinate
-
-  // Add the current point to the path
-  ctx.beginPath();
-  ctx.moveTo(prevX, prevY);
-  ctx.lineTo(currentX, currentY);
-  ctx.stroke();
-
-  // Smooth the path
-  let midX = (prevX + currentX) / 2;
-  let midY = (prevY + currentY) / 2;
-  ctx.quadraticCurveTo(prevX, prevY, midX, midY);
-
-  prevX = currentX;
-  prevY = currentY;
 });
 
 // Model function
@@ -334,4 +409,25 @@ function smoothDraw() {
   drawSmoothLine();
 
   requestAnimationFrame(smoothDraw);
+}
+
+//helper
+function matchStartColor(pixelPos) {
+  let r = colorLayer.data[pixelPos];
+  let g = colorLayer.data[pixelPos + 1];
+  let b = colorLayer.data[pixelPos + 2];
+  return r === startR && g === startG && b === startB;
+}
+
+function getPixelColor(x, y) {
+  let pixel = imageData.data;
+  return `rgb(${pixel[0]}, ${pixel[1]}, ${pixel[2]})`;
+}
+
+function getCurrentColor() {
+  // Get the value of the color input element
+  let colorInput = document.getElementById("color-picker");
+  let color = colorInput.value;
+
+  return color;
 }

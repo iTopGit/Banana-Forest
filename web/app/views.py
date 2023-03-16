@@ -109,6 +109,10 @@ def remove_post():
 def test():
     return render_template('img_test.html')
 
+@app.route('/dt')
+def test_d():
+    return render_template('draw_test.html')
+
 @app.route('/draw', methods=["POST", "GET"])
 @login_required
 def draw_page():
@@ -417,10 +421,6 @@ def facebook_auth():
     login_user(user)
     return redirect('/')
 
-#image_api_call
-# @app.route('/image/<filename>')
-# def get_image(filename):
-#     return app.send_static_file(f'static/img/user-blog{filename}', mimetype='image/png')
 
 @app.route('/image/<int:image_id>')
 def get_image(image_id):
@@ -432,30 +432,6 @@ def get_image(image_id):
     else:
         # image not found
         return "Image not found", 404
-
-@app.route("/db/blogEntry")
-@login_required
-def db_BlogEntry():
-    blogEntry = []
-    db_blogEntry = BlogEntry.query.all()
-
-    blogEntry = list(map(lambda x: x.to_dict(), db_blogEntry))
-    blogEntry.sort(key=lambda x: x['id'])
-    app.logger.debug("DB blogEntry: " + str(blogEntry))
-
-    return jsonify(blogEntry)
-
-@app.route("/db/authuser")
-@login_required
-def db_authuser():
-    authuser = []
-    db_authuser = AuthUser.query.filter()
-
-    # authuser = list(map(lambda x: x.to_dict(), db_authuser))
-    authuser.sort(key=lambda x: x['id'])
-    app.logger.debug("DB AuthUser: " + str(authuser))
-
-    return jsonify(authuser)
 
 @app.route("/db/image")
 @login_required

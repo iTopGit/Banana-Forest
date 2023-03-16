@@ -1,0 +1,170 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="static/js/darw-api.js" defer></script>
+        <!-- Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+        <title>Drawing App 🎨</title>
+    </head>
+    <style>
+        body {
+            margin: 0px;
+        }
+        
+        .full-page {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+        }
+        
+        /* Canvas */
+        
+        .canvas-container {
+            background-color: bisque;
+            width: 70%;
+            /* height: 70%; */
+        }
+        
+        canvas {
+            background: #66CCCC;
+            position: absolute;
+            /* z-index: 100; */
+            /* transition: all 1s; */
+            width: 70%;
+        }
+        
+        #tempCanvas {
+            position: absolute;
+            /* z-index: 1; */
+            border: 5px solid blue;
+        }
+        
+        /* Toolbox */
+        
+        .sidebar {
+            background-color: burlywood;
+            width: 30%;
+        }
+        
+        .toolbox {
+            margin: 8px;
+            display: flex;
+            flex-flow: column wrap;
+          }
+        
+        .undoredo {
+            display: flex;
+            justify-content: flex-start;
+        }
+        
+        .undoredo div {
+            margin: 1vh;
+            user-select: none;
+            width: 10vw;
+            text-align: center;
+            color: white;
+            height: 60px;
+            border-radius: 1vh;
+            opacity: 1;
+        }
+        
+        .undoredo div:hover {
+            opacity: 0.8;
+        }
+        
+        .undo-button {
+            background: rgb(212, 45, 45);
+        }
+        
+        .redo-button {
+            background: rgb(104, 181, 233);
+        }
+        
+        .columns {
+            display: flex;
+        }
+        
+        /* Color Picker */
+        .swatch {
+            background: rgb(255, 0, 0);
+            width: 10vw;
+            height: 10vw;
+            margin: 1vh;
+            border-radius: 1vh;
+        }
+        
+        /* Tools */
+        
+        h4 {
+            text-align: center;
+            margin: 0px;
+        }
+        
+        .tools {
+            display: flex;
+            justify-content: flex-start;
+            flex-flow: column wrap;
+            margin: 1vh;
+        }
+        
+        .tool {
+            background: rgb(105, 76, 212);
+            margin: 0vh;
+            user-select: none;
+            width: 10vw;
+            text-align: center;
+            color: white;
+            height: 60px;
+            border-radius: 1vh;
+            opacity: 1;
+        }
+        
+        .tool:hover {
+            opacity: 0.8;
+        }
+    </style>
+    <body>
+        <div class="full-page">
+            <div class="canvas-container">
+              <canvas id="onScreen" width="320px" height="320px"></canvas>
+            </div>
+            <div class="sidebar">
+              <div class="toolbox">
+                <div class="undoredo">
+                  <div class="undo-button" id="undo">
+                    <h3>Undo<h3>
+                  </div>
+                  <div class="redo-button" id="redo">
+                    <h3>Redo<h3>
+                  </div>
+                </div>
+                <div class="swatch"></div>
+                <div class="columns">
+                  <div class="tools">
+                    <h4>Tools</h4>
+                    <div class="tool" id="pencil">
+                      <h3>Pencil</h3>
+                    </div>
+                    <div class="tool" id="line">
+                      <h3>Line</h3>
+                    </div>
+                    <div class="tool" id="fill">
+                      <h3>Fill</h3>
+                    </div>
+                    <div class="tool" id="picker">
+                      <h3>Picker</h3>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    </body>
+    <script src ="/static/js/darw-api.js"></script>
+</html>
