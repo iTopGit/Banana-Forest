@@ -77,8 +77,8 @@
           <img class="tw-user-small rounded-circle object-fit-cover float-end dropdown-toggle"
             src="{{ current_user.avatar_url }}" data-bs-toggle="dropdown" aria-expanded="false">
           <ul class="dropdown-menu dropdown-menu-lg-end p-2">
-            <li><a class="dropdown-item" href="{{ url_for('profile') }}">Profile</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
+            <li><a class="dropdown-item rounded" href="{{ url_for('profile') }}">Profile</a></li>
+            <li><a class="dropdown-item rounded" href="{{ url_for('logout') }}">Logout</a></li>
           </ul>
         </div>
         {% else %}
