@@ -17,7 +17,7 @@ let draw = false;
 let undoList = [];
 let redoList = [];
 
-canvas.style.backgroundColor = "#ADFF2F";
+canvas.style.backgroundColor = "white";
 var theInput = document.getElementById("favcolor");
 
 theInput.addEventListener(

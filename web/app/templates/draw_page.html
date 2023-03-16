@@ -7,21 +7,53 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="static/js/draw-script.js" defer></script>
 
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+  <!-- new bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
     crossorigin="anonymous"></script>
-
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+  <!-- css -->
+  <link rel="stylesheet" href="../static/css/open-iconic-bootstrap.css">
   <title>Drawing App 🎨</title>
   <link rel="stylesheet" href="static/css/draw-page.css">
 
 </head>
 
-<body class="vh-100">
+<body>
 
-  <nav class="navbar navbar-expand">
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold" href="{{ url_for('index') }}">Banana Forest</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#"></a>
+          </li>
+        </ul>
+        {% if current_user.is_authenticated %}
+        <a class="navbar-brand" href="http://localhost:56733/draw">Draw</a>
+        <div class="dropdown">
+          <img class="tw-user-small rounded-circle object-fit-cover float-end dropdown-toggle"
+            src="{{ current_user.avatar_url }}" data-bs-toggle="dropdown" aria-expanded="false">
+          <ul class="dropdown-menu dropdown-menu-lg-end p-2">
+            <li><a class="dropdown-item" href="{{ url_for('profile') }}">Profile</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
+          </ul>
+        </div>
+        {% else %}
+        <a class="nav-link" href="{{ url_for('login') }}"><i class="bi bi-key p-1"></i>Login</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <!-- <nav class="navbar navbar-expand">
     <div class="container-fluid">
       <div class="navbar-nav">
         <a class="nav-item nav-link" href="http://localhost:56733"><span class="oi oi-home"></span><span class="nav-text">Home</span></a>
@@ -30,13 +62,13 @@
         <img class="tw-user-small rounded-circle" src="static/img/tweeterUserSmall.jpg" width="40"> &nbsp;
       </div>
     </div>
-  </nav>
+  </nav> -->
 
   <div class="container-fluid display-container">
     <div class="row">
-      <div class="col-2 p-5">
-        <div class="container toolsbar py-2">
-          <div class="row py-1 justify-content-center">
+      <div class="col-2 pt-5">
+        <div class="container toolsbar justify-content-center rounded">
+          <div class="d-flex row p-1 justify-content-center">
             <div class="col-2 m-1 clr clr-black" data-clr="black"></div>
           </div>
           <div class="row py-1 justify-content-center">
@@ -61,42 +93,43 @@
             <div class="col-2 m-1 clr clr-white" data-clr="white"></div>
           </div>
         </div>
-        <div class="container brushbar py-1 mt-3">
+        <div class="container brushbar py-1 mt-3 rounded">
           <div class="row p-2 justify-content-center">
-            <input type="range" name="ageInputName" class="form-range pl-1 px-1" id="ageInputId" value="5" min="1" max="10"
-              oninput="ageOutputId.value = ageInputId.value">
+            <input type="range" name="ageInputName" class="form-range pl-1 px-1" id="ageInputId" value="5" min="1"
+              max="10" oninput="ageOutputId.value = ageInputId.value">
           </div>
           <div class="row justify-content-center">
-            <output id="ageOutputId" class="text-center pb-1" style="font-weight: 900; color: #8B4513;">5</output>
+            <output id="ageOutputId" class="text-center pb-1" style="font-weight: 900; color: black;">5</output>
           </div>
-          
+
         </div>
 
       </div>
       <div class="col-8 p-5" id="canvas-container">
-        <canvas id="canvas"></canvas>
+        <canvas class="rounded" id="canvas"></canvas>
       </div>
       <div class="col-2 p-5">
-        <div class="container bgcontrol mb-5">
+        <div class="container bgcontrol mb-5 rounded">
           <div class="row p-2 py-4 justify-content-center">
             <input type="color" class="form-control form-control-color" id="favcolor" value="#FFFFFF">
           </div>
         </div>
 
-        <div class="container controlbar py-2 mt-5">
-          <div class="row p-2 py-2 justify-content-center">
-            <button class="btn clear">Clear</button>
+        <div class="container controlbar p-4 rounded mt-5">
+          <div class="row justify-content-center">
+            <button class="btn btn-primary clear m-1">Clear</button>
           </div>
-          <div class="row p-2 py-2 justify-content-center">
-            <button class="btn save">Save</button>
+          <div class="row justify-content-center">
+            <button type="button" class="btn btn-primary save  m-1">Save</button>
           </div>
-          <div class="row p-2 py-2 justify-content-center">
-            <button class="btn done" id="done">Done</button>
+          <div class="row justify-content-center">
+            <button class="btn btn-primary done  m-1" id="done">Done</button>
           </div>
         </div>
       </div>
     </div>
   </div>
+
   <div id="myModal" class="modal">
     <!-- Modal content -->
     <div class="modal-content">
@@ -109,7 +142,8 @@
       <button class="btn btn-primary save">Save</button>
     </div>
   </div>
-<!--<div id="myModal" class="modal">
+
+  <!--<div id="myModal" class="modal"> -->
   <!-- Modal content -->
   <!--<div class="modal-content">
     <span class="close">&times;</span>
@@ -121,5 +155,7 @@
     </form>
   </div>
 </div>-->
+
 </body>
+
 </html>
