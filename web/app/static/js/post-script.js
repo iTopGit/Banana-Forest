@@ -142,10 +142,10 @@ function post_blog(
 //   console.log("like_check : " + like_check);
 //   console.log("like_val : " + like_val);
   return `
-    <div class="tweet">
+    <div class="tweet rounded">
     <div class="row">
         <div class="col-md-2 text-center">
-        <img class="tw-user-medium rounded-circle" src="${avatar_url}"/>
+        <img class="tw-user-medium rounded-circle img-fluid" src="${avatar_url}"/>
         </div>
         <div class="col-md-10">
         <div class="row tweet-info">
@@ -188,19 +188,19 @@ function post_blog(
         }
         ${
           img_id !== "-1"
-            ? `<div class="tweet-media">
-                <img src="/image/${img_id}" alt="Image">
+            ? `<div class="tweet-media bg-light m-2 rounded">
+                <img src="/image/${img_id}" class="draw-picture img-fluid" alt="Image">
                 </div>`
             : ``
         }
         
-        <div class="row text-muted">
+        <div class="row text-muted m-2 ">
             
-            <div class="col-md-2">
+            <div class="col-md-2 justify-content-center">
 
             <span id = "retweet${id}" class="fi fi-sr-arrows-retweet" style="color: rgb(108, 117, 125);" onclick="retweet_blog(${id})"></span>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2 justify-content-center">
             ${
               like_check
                 ? `<span id = "like${id}" class="fi fi-ss-heart" style="color: red;" onclick="like_blog(${id})">
@@ -209,7 +209,7 @@ function post_blog(
             <span id = "like${id}" class="fi fi-ss-heart"  onclick="like_blog(${id})">${like_val}</span>`
             }
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2 justify-content-center">
             <a href = "mailto: ${email}"><i class="fi fi-sr-envelope-open" ></i></a>
             </div>
         </div>
