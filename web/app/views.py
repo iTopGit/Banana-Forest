@@ -107,13 +107,12 @@ def draw_page():
     if request.method == "POST":
         result = request.form.to_dict()
         app.logger.debug(str(result))
-        path = './app/static/img/user-blog/'
 
         data_url = request.form['pic']
+        message = request.form['message']
 
         # Split the data URL to get the MIME type and base64-encoded data
         mime_type,base64_data = data_url.split(",", 1)#[1]
-        # mime_type = data_url.split(';')[0].split(':')[1]
         app.logger.debug(str("mime_type : "+ mime_type))
         
         # Decode the base64 data
@@ -121,13 +120,19 @@ def draw_page():
         hash_name = current_user.email + current_user.name + str(datetime.datetime.now())
         filename = generate_password_hash(hash_name, method='sha256')+ ".png"
 
-        # Write the binary data to a file
-        # with open(path + filename, "wb") as f:
-            # f.write(binary_data)
 
         img = Img(name=filename, mimetype=mime_type, data=binary_data)
 
         db.session.add(img)
+        db.session.commit()
+        validated_dict = {}
+        img_id = img.id
+        validated_dict['owner_id'] = current_user.id
+        validated_dict['message'] = message
+        validated_dict['img_id'] = img_id
+        entry = PosonalPost(**validated_dict)
+        app.logger.debug(str(entry))
+        db.session.add(entry)
         db.session.commit()
 
         return 'Img Uploaded!', 200
