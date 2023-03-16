@@ -10,30 +10,27 @@
       <p class="title text-center text-uppercase fs-1 fw-bold m-1">Signup</p>
       <p id="errorMessage" class="text-danger" style="display: none;">Email already exists Go to <a href="{{ url_for('login') }}" class="text-danger">login.</a></p>
       <div class="control">
-        <p class="m-0 fw-bold"><i class="bi bi-envelope p-1"></i>Emai</p>
         <input class="input is-large form-control" type="email" name="email" autofocus required>
-      </div> <br>
+        <label> <i class="fa-solid fa-envelope"></i> Email</label>
+      </div>
       <div class="control">
-        <p class="m-0 fw-bold"><i class="bi bi-person p-1"></i>Name</p>
         <input class="input is-large form-control" type="text" name="name" required>
-      </div> <br>
+        <label> <i class="fa-solid fa-user"></i> Name</label>
+      </div>
+      <p id="errorMessage_cf_pass" class="text-danger" style="display: none;">Passwords do not match, Please try again</a></p>
       <div class="control">
-        <p class="m-0 fw-bold"><i class="bi bi-key p-1"></i>Password</p>
         <input class="input is-large form-control" type="password" name="password" required>
-      </div> <br>
+        <label> <i class="fa-sharp fa-solid fa-key"></i> Password</label>
+      </div>
       <div class="control">
-        <p class="m-0 fw-bold"><i class="bi bi-key p-1"></i>Confirm Password</p>
-        <!-- <input class="input is-large form-control" type="password" name="password" required> -->
-      </div> <br>
+        <input class="input is-large form-control" type="password" name="cf_password" required>
+        <label> <i class="fa-sharp fa-solid fa-key"></i> Confirm Password</label>
+      </div>
 
       <p class="d-flex justify-content-center">
         <a href="google/" class="nav-link m-1 p-2 rounded border-3" style="border: 3px solid #FF4500;">
           <i class="bi bi-google"></i> &nbsp 
           <span>Google</span> &nbsp 
-        </a>
-        <a href="facebook/" class="nav-link m-1 p-2 rounded border-3" style="border: 3px solid #1E90FF;">
-          <i class="bi bi-facebook"></i> &nbsp 
-          <span>Facebook</span> &nbsp 
         </a>
       </p>
       <div class="d-flex justify-content-center">
@@ -43,61 +40,31 @@
   </div>
 </div>
 
-
-
-
-
-
-
-<!-- <div class="column is-4 is-offset-4">
-  <div class="box">
-    <div class="wrapper">
-      <div class="form-box">
-        <form id="myForm" method="POST">
-          <h2 class="title">Sign Up</h2>
-          <p id="errorMessage" style="display: none; color: red;">Email already exists Go to <a href="{{ url_for('login') }}">login page</a></p>
-          <div class="control">
-            <span class="icon">
-              <i class="fa-solid fa-envelope"></i>
-            </span>
-            <input class="input is-large" type="email" name="email"autofocus="" required>
-            <label>Emai</label>
-          </div>
-          <div class="control">
-            <span class="icon">
-              <i class="fa-solid fa-address-card"></i>
-            </span>
-            <input class="input is-large" type="text" name="name" autofocus="" required>
-            <label>Name</label>
-            
-          </div>
-          <div class="control">
-            <span class="icon">
-              <i class="fa-sharp fa-solid fa-key"></i>
-            </span>
-            <input class="input is-large" type="password" name="password" required>
-            <label>Password</label>
-          </div>
-        <button class="button is-block is-info is-large is-fullwidth">Sign Up</button>
-      </form>
-    </div>
-  </div>
- </div>
-</div> -->
-
-
 <script>
   const myForm = document.getElementById("myForm");
   const errorMessage = document.getElementById("errorMessage");
+  const errorMessage_cf_pass = document.getElementById("errorMessage_cf_pass")
   {% with messages = get_flashed_messages() %}
     {% if messages %}
         if ("{{ messages[0] }}" === "Email address already exists") {
+          myForm.style.display = "block";
           errorMessage.style.display = "block";
         } else {
           errorMessage.style.display = "none";
         }
     {% endif %}
    {% endwith %}
+
+   {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    if ("{{ messages[0] }}" === "Passwords do not match, Please try again") {
+        myForm.style.display = "block";
+        errorMessage_cf_pass.style.display = "block";
+    } else {
+        errorMessage_cf_pass.style.display = "none";
+    }
+    {% endif %}
+    {% endwith %}
 </script>
 <link rel="stylesheet" href="../static/css/login-signup.css">
 {% endblock %}
