@@ -59,15 +59,15 @@ function tweet_table(blog_data) {
         name,
         message,
         email,
-        date_create,
-        date_update,
+        date_created,
+        date_updated,
         avatar_url
     }) => {
-        const date_full = Date(date_create + "UTC");
-        let date_post = cal_minutes(date_create)
-        let date_edit = cal_minutes(date_update)
-        let oldDate = new Date(date_create);
-        let editDate = new Date(date_update);
+        const date_full = Date(date_created + "UTC");
+        let date_post = cal_minutes(date_created)
+        let date_edit = cal_minutes(date_updated)
+        let oldDate = new Date(date_created);
+        let editDate = new Date(date_updated);
         if (oldDate.getUTCSeconds() === editDate.getUTCSeconds()) {
             return post_blog(id, name, message, email, date_post, date_full,avatar_url);
         } else {
