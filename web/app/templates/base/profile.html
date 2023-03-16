@@ -147,56 +147,26 @@
 
 
 
-        <!-- <form action="/lab11/profile" method="post" class="form-container">
-            <h2 class="title">Edit Profile</h2>
-            <input type="hidden" name="check_edit" id="check_edit" value="edit_name" required>
-            <div class="forminput">
-                <span class="icon">
-                    <i class="fa-solid fa-address-card"></i>
-                </span>
-                <input type="text" name="name" value="{{current_user.name}}" required>
-                <label>Name</label>
-            </div>
-            <p id="errorMessage_mail" style="display: none; color: red;">Email is already taken.</p>
-            <div class="forminput">
-                <span class="icon">
-                    <i class="fa-solid fa-envelope"></i>
-                </span>
-                <input type="email" name="email" value="{{current_user.email}}" required>
-                <label>Email</label>
-            </div>
-            <p id="errorMessage" style="display: none; color: red;">Incorrect password. Please try again.</p>
-            <div class="forminput">
-                <span class="icon">
-                    <i class="fa-sharp fa-solid fa-key"></i>
-                </span>
-                <input type="password" name="password" id="password" required>
-                <label>Password</label>
-            </div>
-            <div class="button_name">
-                <button type="submit" class="btn">Confirm</button>
-                <button type="button" class="btn" id="closeForm">Cancel</button>
-            </div>
-        </form> -->
 
-        <form action="/lab11/profile" id="cnForm" method="POST" hidden="hidden">
+        <form action="/profile" id="cnForm" method="POST" hidden="hidden">
             <input type="hidden" name="check_edit" id="check_edit" value="edit_name" required>
             <p id="errorMessage" style="display: none; color: red;">Please check your details and try again.</p>
             
 
             <div class="control">
-                <p class="m-0 fw-bold"><i class="bi bi-envelope p-1"></i>Emai</p>
-                <input class="input is-large form-control" type="email" name="email" autofocus required>
-                <input type="text" name="name" value="{{current_user.name}}" required>
-                <input type="email" name="email" value="{{current_user.email}}" required>
+                <p class="m-0 fw-bold"><i class="bi bi-person p-1"></i>Name</p>
+                <input class="input is-large form-control" type="text" name="name" value="{{current_user.name}}" autofocus required>
+                <input type="email" name="email" value="{{current_user.email}}"  hidden required>
             </div> <br>
             <div class="control">
                 <p class="m-0 fw-bold"><i class="bi bi-key p-1"></i> Password</p>
-                <input class="input is-large form-control" type="password" name="password" required>
+                <input class="input is-large form-control" type="password" name="password" id="password" required>
             </div> <br>
             <div class="d-flex justify-content-center">
-                <button id="login_btn"
-                    class="btn btn-success btn-lg is-block is-info is-large is-fullwidth border border-3 border-dark">Login</button>
+                <div class="button_name">
+                    <button type="submit" class="btn border border-3 border-dark">Confirm</button>
+                    <button type="button" class="btn border border-3 border-dark" id="closeForm">Cancel</button>
+                </div>
             </div>
         </form>
     </div>
