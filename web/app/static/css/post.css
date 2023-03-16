@@ -18,17 +18,17 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #28282B;
+    background-color: #9ACD32;
+    border: 3px solid  #008000;
     margin: 5% auto;
     padding: 20px;
-    border: 1px solid #888;
     width: 80%;
     max-width: 500px;
     border-radius: 25px;
 }
 .wrapper_choose h2{
     font-size: 40px;
-    color: whitesmoke;
+    color: black;
     text-align: center;
 }
 .forminput{
@@ -72,9 +72,9 @@
     line-height: 57px;
 }
 .wrapper_choose button{
-    width: 50%;
+    /* width: 50%; */
     height: 45px;
-    background: #28282B;
+    /* background: #28282B; */
     border: 2px solid whitesmoke;
     border-radius: 20px;
     cursor: pointer;
@@ -112,10 +112,10 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #28282B;
+    background-color: #9ACD32;
     margin: 5% auto;
     padding: 20px;
-    border: 1px solid #888;
+    border: 3px solid #008000;
     width: 80%;
     max-width: 500px;
     border-radius: 25px;
@@ -127,9 +127,9 @@
 }
 input[type=submit],
 .btn_post{
-    width: 50%;
+    width: 70px;
     height: 45px;
-    background: #28282B;
+    background: #014D4E;
     border: 2px solid whitesmoke;
     border-radius: 20px;
     cursor: pointer;
@@ -141,4 +141,8 @@ input[type=submit],
 .container {
     border-radius: 10px;
     padding: 20px;
+}
+
+.sb {
+    background-color: #014D4E; 
 }

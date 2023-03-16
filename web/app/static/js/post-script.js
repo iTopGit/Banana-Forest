@@ -145,7 +145,7 @@ function post_blog(
     <div class="tweet rounded">
     <div class="row">
         <div class="col-md-2 text-center">
-        <img class="tw-user-medium rounded-circle img-fluid" src="${avatar_url}"/>
+        <img class="tw-user-medium rounded-circle img-fluid user-picture" src="${avatar_url}"/>
         </div>
         <div class="col-md-10">
         <div class="row tweet-info">
