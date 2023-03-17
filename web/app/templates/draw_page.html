@@ -31,7 +31,7 @@
   
 </head>
 
-<body>
+<body onload="fill()">
 
   <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
@@ -178,7 +178,7 @@
             <input id="img-input" type="text" name="pic" hidden="hidden" /><br>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button class="btn btn-primary save">Save</button>
+              <button type="button" class="btn btn-primary save m-1" onclick="download()">Save</button>
               <input class="btn btn-primary" type="submit" value="Post" />
             </div>
           </form> 

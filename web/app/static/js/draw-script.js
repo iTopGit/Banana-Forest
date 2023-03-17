@@ -17,13 +17,15 @@ let draw = false;
 let undoList = [];
 let redoList = [];
 
-canvas.style.backgroundColor = "white";
 const ctx = canvas.getContext("2d");
 ctx.lineWidth = lineW;
 ctx.lineJoin = "round";
 ctx.lineCap = "round";
-ctx.fillStyle = "#ffffff";
-// canvas.style.backgroundColor = "#FFFFFF";
+function fill() {
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+canvas.style.backgroundColor = "#FFFFFF";
 
 var theInput = document.getElementById("favcolor");
 let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -68,12 +70,21 @@ clearBtn.addEventListener("click", () => {
 
 let saveBtn = document.querySelector(".save");
 saveBtn.addEventListener("click", () => {
-  let data = canvas.toDataURL("imag/png");
+  let img = document.getElementById("img-input").src
+  let data = img.src;
   let a = document.createElement("a");
   a.href = data;
-  a.download = "sketch.png";
+  a.download = "caesar_gift's.png";
   a.click();
 });
+function download() {
+  let img = document.getElementById("img")
+  let data = img.src;
+  let a = document.createElement("a");
+  a.href = data;
+  a.download = "caesar_gift's.png";
+  a.click();
+}
 
 let doneBtn = document.querySelector(".done");
 doneBtn.addEventListener("click", () => {
