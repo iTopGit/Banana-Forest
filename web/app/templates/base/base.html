@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Banana Forest</title>
+  <title>Banana Forest 🍌</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
     integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
@@ -85,7 +85,7 @@
           </li>
         </ul>
         {% if current_user.is_authenticated %}
-        <button class="btn" id="add_post" type="button">Post</button>
+        <button class="btn fw-bold" id="add_post" type="button" href="{{ url_for('draw_page') }}">Draw</button>
         <div class="dropdown">
           <img class="tw-user-small rounded-circle object-fit-cover float-end dropdown-toggle object-fit-cover"
             src="{{ current_user.avatar_url }}" data-bs-toggle="dropdown" aria-expanded="false">

@@ -3,7 +3,7 @@
 <div id="name_user" hidden="hidden">{{ current_user.name }}</div>
 <div id="email_user" hidden="hidden">{{ current_user.email }}</div>
 <div id="id_user" hidden="hidden">{{ current_user.id }}</div>
-<div id="choose_form" class="form-popup">
+<!--<div id="choose_form" class="form-popup">
   <div class="wrapper_choose">
       <form class="form-container">
           <h2 class="title">Select</h2>
@@ -18,7 +18,7 @@
           </div>
       </form>
   </div>
-</div>
+</div>-->
 <div id="PostForm" class="form-popup-post">
   <div class="wrapper_post">
       <form class="form-container" method="post" id="postform">
@@ -69,7 +69,7 @@
   const closePostForm = document.getElementById("closeFormPost");
 
   openChooseButton.addEventListener("click", () => {
-    ChooseForm.style.display = "block";
+    window.location.href="{{ url_for('draw_page') }}";  
   });
 
 

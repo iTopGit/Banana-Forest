@@ -1,10 +1,5 @@
 {% extends "base/base.html" %}
 {% block content %}
-
-
-
-
-
 <!-- <div class="container" id="profile_info_blog">
     <div class="row">
         <div id="profile_" class="col-md-3">
@@ -98,8 +93,6 @@
 <div class="container-fluid" id="profile_info_blog">
     <div
         class="position-absolute top-50 start-50 translate-middle p-4 col-3 rounded border border-3 border-dark inputform">
-
-
         <div class="container-fluid" id="user-detail">
             <p class="d-flex justify-content-center">
                 <img class="tw-user-small rounded-circle" id="img_profile" src="{{ current_user.avatar_url }}" alt=""
@@ -255,25 +248,7 @@
     const errorMessageOldPass = document.getElementById("errorMessage_oldpass");
     const errorMessageConfirmPass = document.getElementById("errorMessage_confirmpass");
 
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    if ("{{ messages[0] }}" === "Incorrect password.") {
-        myForm.style.display = "block";
-        errorMessagePass.style.display = "block";
-        closeFormButton.removeEventListener("click", closeFormHandler);
-        closeFormButton.addEventListener("click", function (event) {
-            event.stopPropagation();
-            errorMessagePass.style.display = "none";
-            errorMessageMail.style.display = "none";
-        });
-    } else if ("{{ messages[0] }}" === "Email is already taken.") {
-        myForm.style.display = "block";
-        errorMessageMail.style.display = "block";
-    } else {
-        myForm.style.display = "none";
-    }
-    {% endif %}
-    {% endwith %}
+    
 
     function displayChange() {
         if ($('#change-button').attr('hidden')) {
@@ -410,8 +385,8 @@
         errorMessageConfirmPass.style.display = "none";
     }
     closeFormButtonPass.addEventListener("click", closeFormPassHandler);
-
     
+
     
 </script>
 <link rel="stylesheet" href="../static/css/login-signup.css">
