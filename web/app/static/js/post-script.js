@@ -155,7 +155,7 @@ function post_blog(
             <span class="tweet-age text-muted" id ="time${id}">${post_time}</span>
             </div>
             <div class="col tweet-arrow text-muted">
-            <i class="fi fi-bs-menu-dots-vertical float-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+            <i class="fi fi-bs-menu-dots-vertical float-right" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ></i>
             <div class="dropdown-menu">
             ${
               owner_id != current_id
@@ -169,9 +169,6 @@ function post_blog(
                 <button  class="dropdown-item" id="deleteButton" href="#" value="${id}" onclick="removeItem(this.value)">Delete</button>`
             }
 
-                <!-- <div class="dropdown-divider"></div> -->
-                <!-- <button class="dropdown-item" id="editButton" value="${id}" onclick="changeDivToTextArea(this.value)">Edit</button > --!>
-                
             </div>
             </div>
         </div>
@@ -266,7 +263,7 @@ function diff_minutes(dt1) {
     }
   } else {
     if (diff < 1) {
-      result = "Just Tweet";
+      result = "Just Post";
     } else {
       result += "min";
     }
@@ -359,4 +356,7 @@ function check_color(array, id) {
   return check;
 }
 
-
+function tweet_mess() {
+    alert("value");
+  }
+  
