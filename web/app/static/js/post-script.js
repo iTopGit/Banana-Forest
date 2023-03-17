@@ -155,7 +155,7 @@ function post_blog(
             <span class="tweet-age text-muted" id ="time${id}">${post_time}</span>
             </div>
             <div class="col tweet-arrow text-muted">
-            <i class="fi fi-bs-menu-dots-vertical float-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+            <i class="fi fi-bs-menu-dots-vertical float-right dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
             <div class="dropdown-menu">
             ${
               owner_id != current_id
