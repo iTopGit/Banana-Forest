@@ -2,8 +2,8 @@ import secrets
 import string
 import base64
 import datetime
-
-from flask import (jsonify, render_template,send_file,
+import json
+from flask import (jsonify, render_template, send_file,
                    request, url_for, flash, redirect)
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.urls import url_parse
@@ -30,6 +30,7 @@ def load_user(user_id):
     # since the user_id is just the primary key of our
     # user table, use it in the query for the user
     return AuthUser.query.get(int(user_id))
+
 
 @app.route('/', methods=('GET', 'POST'))
 def index():
@@ -78,7 +79,6 @@ def index():
     return render_template('base/index.html')
 
 
-
 @app.route('/remove_post', methods=('GET', 'POST'))
 def remove_post():
     app.logger.debug("REMOVE")
@@ -95,13 +95,16 @@ def remove_post():
             raise
     return db_post()
 
+
 @app.route('/test')
 def test():
     return render_template('img_test.html')
 
+
 @app.route('/dt')
 def test_d():
     return render_template('draw_test.html')
+
 
 @app.route('/draw', methods=["POST", "GET"])
 @login_required
@@ -114,14 +117,14 @@ def draw_page():
         message = request.form['message']
 
         # Split the data URL to get the MIME type and base64-encoded data
-        mime_type,base64_data = data_url.split(",", 1)#[1]
-        app.logger.debug(str("mime_type : "+ mime_type))
-        
+        mime_type, base64_data = data_url.split(",", 1)  # [1]
+        app.logger.debug(str("mime_type : " + mime_type))
+
         # Decode the base64 data
         binary_data = base64.b64decode(base64_data)
-        hash_name = current_user.email + current_user.name + str(datetime.datetime.now())
-        filename = generate_password_hash(hash_name, method='sha256')+ ".png"
-
+        hash_name = current_user.email + \
+            current_user.name + str(datetime.datetime.now())
+        filename = generate_password_hash(hash_name, method='sha256') + ".png"
 
         img = Img(name=filename, mimetype=mime_type, data=binary_data)
 
@@ -137,7 +140,7 @@ def draw_page():
         db.session.add(entry)
         db.session.commit()
 
-        return 'Img Uploaded!', 200
+        return redirect(url_for('index'))
     return render_template('draw_page.html')
 
 
@@ -151,32 +154,45 @@ def db_connection():
         return '<h1>db is broken.</h1>' + str(e)
 
 
-@app.route('/update_like', methods=["POST"])
+@app.route('/update_like', methods=["POST", "GET"])
 def update_like():
     data = request.json
 
-    id = current_user.id
+    user_id = current_user.id
 
+    app.logger.debug("user_id : " + str(user_id))
+    blog_id = data.get('blog_id')
     state = data.get('state')
 
-    entry = BlogEntry.query.get(id)
-
+    entry = BlogEntry.query.get(blog_id)
+    array = entry.like
+    app.logger.debug("entry : "+str(entry.like))
     if not entry:
         return 'BlogEntry not found', 404
-    
+
     # If the state is True, add the current user's ID to the like field
     if state:
-        entry.like_update(id)
+        app.logger.debug("state : add")
+        if array is None: # check if array is None
+            array = [] # initialize array as an empty list
+        array = list(set(array + [user_id])) # concatenate array with [user_id]
+
+        entry.like_update(array)
     else:
         try:
-            entry.like_remove(id)
+            app.logger.debug("state : delete")
+            app.logger.debug("array : "+str(array))
+            array = array.remove(user_id)
+            
+            entry.like_update(array)
         except ValueError:
+            app.logger.debug("array : "+str(array))
+
             return 'Item not found in like field', 400
 
     db.session.commit()
 
     return 'Like updated', 200
-
 
 
 @app.route('/profile', methods=('GET', 'POST'))
@@ -217,7 +233,6 @@ def profile():
                 old_password = request.form.get("old_password")
                 new_password = request.form.get("new_password")
                 confirm_password = request.form.get("confirm_password")
-                
 
                 if not check_password_hash(current_user.password, old_password):
                     flash("Incorrect password, Please try again")
@@ -233,6 +248,7 @@ def profile():
                 db.session.commit()
 
                 flash("Password updated successfully.")
+
     return render_template('base/profile.html')
 
 
@@ -403,19 +419,22 @@ def get_image(image_id):
     else:
         # image not found
         return "Image not found", 404
-    
+
+
 @app.route('/user/<int:user_id>')
 def get_user(user_id):
     # query database for image
     db_user = AuthUser.query.get(user_id)
     if db_user:
-        user = {"name":db_user.name, "email":db_user.email, "avatar_url":db_user.avatar_url}
+        user = {"name": db_user.name, "email": db_user.email,
+                "avatar_url": db_user.avatar_url}
         app.logger.debug("DB user: " + str(user))
         # create a response with the image data and mimetype
         return jsonify(user)
     else:
         # image not found
         return "User not found", 404
+
 
 @app.route("/db/image")
 @login_required
@@ -431,13 +450,14 @@ def db_image():
 
     return jsonify(Image)
 
+
 @app.route("/post_db")
 def db_post():
     post = []
     db_post = PosonalPost.query.all()
 
     post = list(map(lambda x: x.to_dict(), db_post))
-    post.sort(key=lambda x:x['id'])
+    post.sort(key=lambda x: x['id'])
     app.logger.debug("DB Content: " + str(post))
 
     return jsonify(post)

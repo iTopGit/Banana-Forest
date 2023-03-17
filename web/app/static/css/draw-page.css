@@ -162,8 +162,6 @@ textarea {
 }
 
 .tool {
-  padding-top: 20%;
-  padding-bottom: 20%;
   max-width: 60px;
   max-height: 60px;
   transition: transform 0.5s;
@@ -174,15 +172,14 @@ textarea {
   transform: scale(1.15);
 }
 
-/* .modal{
-  width: 80%;
-  margin-top: 10%;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-} */
+.modal-content{
+  background-color: #9ACD32;
+  border: 3px solid #008000;
+}
 
+.fin-pic {
+  background-color: white;
+}
 /* button {
   border: none;
   outline: none;

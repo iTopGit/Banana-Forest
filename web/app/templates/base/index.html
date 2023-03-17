@@ -6,15 +6,15 @@
 <div id="choose_form" class="form-popup">
   <div class="wrapper_choose">
       <form class="form-container">
-          <h2 class="title">Choose</h2>
-          <div class="forminput">
-            <button type="button" class="btn_choose" id="message_btn">Message</button>
+          <h2 class="title">Select</h2>
+          <div class="forminput justify-content-center">
+            <button type="button" class="btn btn-sucess btn_choose justify-content-center container-fluid sb" id="message_btn">Message</button>
           </div>
-          <div class="forminput">
-            <button  type="button" class="btn_choose" id="draw_btn" onclick="Gotodraw()">Draw</button>
+          <div class="forminput justify-content-center">
+            <button  type="button" class="btn_choose justify-content-center container-fluid sb" id="draw_btn" onclick="Gotodraw()">Draw</button>
           </div>
-          <div class="button_choose">
-              <button type="button" class="btn_choose" id="closeForm">Cancel</button>
+          <div class="button_choose justify-content-center">
+              <button type="button" class="btn_choose justify-content-center container-fluid sb" id="closeForm">Cancel</button>
           </div>
       </form>
   </div>
@@ -32,7 +32,7 @@
                 maxlength="280"
                 placeholder="Your message..." 
                 required 
-                style="background-color: #28282B; color: white;"></textarea>
+                style="background-color: white; color: black;"></textarea>
           </div>
           <input type="hidden" id="entryid" name="id" value="">
           <input type="hidden" id="name" name="name" value="{{ current_user.name }}">
@@ -53,12 +53,12 @@
 </div>
 <div class="container">
   <div class="row">
-      <div id="left_3" class="col-md-2" >
+      <div id="left_3" class="col-md-3" >
       </div>
-      <div id="center_6" class="col-md-8">
+      <div id="center_6" class="col-md-6">
           <div class="blog" id="blog-data"></div>
       </div>
-      <div id="right_3" class="col-md-2">
+      <div id="right_3" class="col-md-3">
       </div>
   </div>
 </div>
