@@ -180,6 +180,50 @@ textarea {
 .fin-pic {
   background-color: white;
 }
+#highlight{
+  max-width: 60px;
+  max-height: 60px;
+  transition: transform 0.5s;
+  padding-top: 1%;
+  padding-bottom: 1%;
+}
+#highlight :hover{
+  filter: invert(100%);
+  transform: scale(1.15);
+}
+#pencil{
+  max-width: 60px;
+  max-height: 60px;
+  transition: transform 0.5s;
+  margin-top: 15px;
+  padding-bottom: 1%;
+}
+#pencil :hover{
+  filter: invert(100%);
+  transform: scale(1.15);
+}
+#eraser{
+  max-width: 60px;
+  max-height: 60px;
+  transition: transform 0.5s;
+  padding-top: 1%;
+  padding-bottom: 1%;
+}
+#eraser :hover{
+  filter: invert(100%);
+  transform: scale(1.15);
+}
+#picker{
+  max-width: 60px;
+  max-height: 60px;
+  transition: transform 0.5s;
+  padding-top: 1%;
+  margin-bottom: 0px;
+}
+#picker :hover{
+  filter: invert(100%);
+  transform: scale(1.15);
+}
 /* button {
   border: none;
   outline: none;

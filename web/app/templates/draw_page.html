@@ -27,6 +27,7 @@
   <link rel="stylesheet" href="../static/css/open-iconic-bootstrap.css">
   <title>Banana Forest 🍌</title>
   <link rel="stylesheet" href="static/css/draw-page.css">
+  <script src="https://kit.fontawesome.com/87f04edde9.js" crossorigin="anonymous"></script>
 
   
 </head>
@@ -122,13 +123,13 @@
           <div class="row p-2 pt-3 justify-content-center">
             <input type="color" class="form-control form-control-color" id="favcolor" value="#FFFFFF">
             <div class="tools row justify-content-center">
-              <i class="tool bi bi-pencil fs-2 m-1" id="pencil" onclick="changestate('pencil')"></i>
+              <p id="pencil" onclick="changestate('pencil')"><i class="fa-solid fa-pen fa-2x"></i></p>
               <!-- <img class="tool" id="pencil" src="./static/img/pencil.png" onclick="changestate('pencil')"></img> -->
-              <i class="tool bi bi-palette fs-2 m-1" id="highlight" onclick="changestate('highlight')"></i>
+              <p id="highlight" onclick="changestate('highlight')"><i class="fa-solid fa-highlighter fa-2x"></i></p>
               <!-- <img class="tool" id="line" src="./static/img/l.png" onclick="changestate('line')"></img> -->
-              <i class="tool bi bi-paint-bucket fs-2 m-1" id="easer" onclick="changestate('easer')"></i>
+              <p id="eraser" onclick="changestate('easer')"><i class="fa-solid fa-eraser fa-2x"></i></p>
               <!-- <img class="tool" id="fill" src="./static/img/bucket.png" onclick="changestate('fill')"></img> -->
-              <i class="tool bi bi-eyedropper fs-2 m-1" id="picker" onclick="changestate('picker')"></i>
+              <p id="picker" onclick="changestate('picker')"><i class="fa-solid fa-eye-dropper fa-2x"></i></i><p/>
               <!-- <img class="tool" id="picker" src="./static/img/p.png" onclick="changestate('picker')"></img> -->
             </div>
           </div>
