@@ -1,5 +1,7 @@
 var usr_email = $("#usr_email").val();
 
+
+
 function removeItem(id) {
     if (!confirm("Delete this post?")) {
         return false;
@@ -142,6 +144,7 @@ function post_blog(
     let like_check = check_color(like, current_id);
       console.log("like_check : " + like_check);
       console.log("like_val : " + like_val);
+      console.log("email : " + email)
     return `
     <div class="tweet rounded">
     <div class="row">
@@ -158,16 +161,12 @@ function post_blog(
             <div class="col tweet-arrow text-muted">
             <i class="fi fi-bs-menu-dots-vertical float-right" style="float: right;" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ></i>
             <div class="dropdown-menu">
-            ${owner_id != current_id
-            ? `<button  class="dropdown-item" id="editallButton" onclick="like_blog(${id})">Like</button>
-                <div class="dropdown-divider"></div>
-                <button class="dropdown-item" id="editallButton" onclick="window.open('https://www.youtube.com/watch?v=tG1otG8ncFY&ab_channel=Hemsty', '_blank')">Capyspin</button>
-                `
-            : `<button  class="dropdown-item" id="editallButton" href="#" data-target="#popup-tweet" data-toggle="modal" value="${id}" onclick="editpost(this.value)">edit</button>
-                <div class="dropdown-divider"></div>
-                <button  class="dropdown-item" id="deleteButton" href="#" value="${id}" onclick="removeItem(this.value)">Delete</button>`
-        }
-
+            ${owner_id == current_id
+                ?`<button class="dropdown-item" id="editallButton" href="#" data-target="#popup-tweet" data-toggle="modal" value="${id}" onclick="editpost(this.value)">Edit</button>
+                       <div class="dropdown-divider"></div>
+                       <button class="dropdown-item" id="deleteButton" href="#" value="${id}" onclick="removeItem(this.value)">Delete</button>`
+                : `<button class="dropdown-item" id="editallButton" onclick="window.open('https://www.youtube.com/watch?v=tG1otG8ncFY&ab_channel=Hemsty', '_blank')">Capyspin</button>`
+            }
             </div>
             </div>
         </div>
