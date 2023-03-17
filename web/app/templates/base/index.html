@@ -34,7 +34,7 @@
                 required 
                 style="background-color: white; color: black;"></textarea>
           </div>
-          <input type="hidden" id="entryid" name="id" value="">
+          <input type="hidden" id="entryid" name="id" value="{{ current_user.id }}">
           <input type="hidden" id="name" name="name" value="{{ current_user.name }}">
           <input type="hidden" id="usr_email" name="email" value="{{ current_user.email }}">
           <input type="hidden" id="avatar_url" name="avatar_url" value="{{ current_user.avatar_url }}">

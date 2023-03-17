@@ -42,7 +42,7 @@ $("#PostForm").submit(function (event) {
 });
 
 function clearForm() {
-    $("#PostForm")[0].reset();
+    $("#postform")[0].reset();
     $("#entryid").val("");
 }
 
@@ -137,10 +137,10 @@ function post_blog(
     like
 ) {
     // console.log(typeof (like));
-    let like_val = get_val(like, owner_id);
-    let like_check = check_color(like, owner_id);
-    //   console.log("like_check : " + like_check);
-    //   console.log("like_val : " + like_val);
+    let like_val = get_val(like, current_id);
+    let like_check = check_color(like, current_id);
+      console.log("like_check : " + like_check);
+      console.log("like_val : " + like_val);
     return `
     <div class="tweet rounded">
     <div class="row">
@@ -341,10 +341,11 @@ function get_val(array, id) {
 }
 function check_color(array, id) {
     let check = false;
-    // console.log(id)
+    id = parseInt(id)
+    console.log(typeof id)
     try {
         check = array.includes(id);
-        // console.log(check)
+        console.log(check)
     } catch (error) {
         // array is not a valid array
     }
