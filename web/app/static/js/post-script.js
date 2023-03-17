@@ -160,7 +160,6 @@ function post_blog(
             <div class="dropdown-menu">
             ${owner_id != current_id
             ? `<button  class="dropdown-item" id="editallButton" onclick="like_blog(${id})">Like</button>
-                <button  class="dropdown-item" id="editallButton" onclick="retweet_blog(${id})">Retweet</button>
                 <div class="dropdown-divider"></div>
                 <button class="dropdown-item" id="editallButton" onclick="window.open('https://www.youtube.com/watch?v=tG1otG8ncFY&ab_channel=Hemsty', '_blank')">Capyspin</button>
                 `
@@ -192,7 +191,7 @@ function post_blog(
             
             <div class="col-md-2 justify-content-center">
 
-            <span id = "retweet${id}" class="fi fi-sr-arrows-retweet" style="color: rgb(108, 117, 125);" onclick="retweet_blog(${id})"></span>
+            
             </div>
             <div class="col-md-2 justify-content-center">
             ${like_check
