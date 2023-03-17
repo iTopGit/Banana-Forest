@@ -208,8 +208,8 @@ def profile():
                     db.session.commit()
 
                     # Update all records in the database with the old name and email
-                    BlogEntry.query.filter_by(name=old_name, email=old_email).update(
-                        {BlogEntry.name: new_name, BlogEntry.email: new_email})
+                    AuthUser.query.filter_by(name=old_name, email=old_email).update(
+                        {AuthUser.name: new_name, AuthUser.email: new_email})
                     db.session.commit()
                     flash('Your changes have been saved.')
                     return redirect(url_for('profile'))
