@@ -107,19 +107,19 @@
         </div>
 
         {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        {%if "{{ messages[0] }}" == "this_is_google_login"%}
-        console.log("google login")
-        {% endif %}
-        {% else %}
-        <div class="container-fluid" id="edit-button">
-            <p class="d-flex justify-content-center">
-                <button class="btn btn-success is-block is-info is-fullwidth border border-3 border-dark col-6"
-                    id="edit_profile_btn" onclick="displayChange()">
-                    Edit Profile</button>
-            </p>
-        </div>
-        {% endif %}
+            {% if messages %}
+            {%if "{{ messages[0] }}" == "this_is_google_login"%}
+            console.log("google login")
+            {% endif %}
+            {% else %}
+            <div class="container-fluid" id="edit-button">
+                <p class="d-flex justify-content-center">
+                    <button class="btn btn-success is-block is-info is-fullwidth border border-3 border-dark col-6"
+                        id="edit_profile_btn" onclick="displayChange()">
+                        Edit Profile</button>
+                </p>
+            </div>
+            {% endif %}
         {% endwith %}
 
 
@@ -150,7 +150,7 @@
 
 
 
-        <form action="/profile" id="ceForm" method="POST" hidden="hidden">
+        <form id="ceForm" method="POST" hidden="hidden">
             <input type="hidden" name="check_edit" id="check_edit" value="edit_name" required>
             <p id="errorMessage" style="display: none; color: red;">Please check your details and try again.</p>
 
@@ -175,7 +175,7 @@
 
 
 
-        <form action="/profile" id="cnForm" method="POST" hidden="hidden">
+        <form id="cnForm" method="POST" hidden="hidden">
             <input type="hidden" name="check_edit" id="check_edit" value="edit_name" required>
             <p id="errorMessage" style="display: none; color: red;">Please check your details and try again.</p>
 
@@ -200,7 +200,7 @@
 
 
 
-        <form action="/profile" id="cpForm" method="POST" hidden>
+        <form  id="cpForm" method="POST" hidden>
             <input type="hidden" name="check_edit" id="check_edit" value="edit_pass" required>
             <p id="errorMessage" style="display: none; color: red;">Please check your details and try again.</p>
 
