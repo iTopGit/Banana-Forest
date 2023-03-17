@@ -17,7 +17,7 @@ $(document).ready(function () {
         $.getJSON("post_db", tweet_table);
     })();
 });
-$("#PostForm").submit(function (event) {
+$("#postform").submit(function (event) {
     // prevent default html form submission action
     event.preventDefault();
     console.log("in");
@@ -31,6 +31,7 @@ $("#PostForm").submit(function (event) {
             formData[key] = val;
         }
     });
+    console.log(formData);
     var $form = $(this);
     var url = $form.attr("action");
 
