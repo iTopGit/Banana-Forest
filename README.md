@@ -34,3 +34,9 @@ Referance:
   
   https://fontawesome.com/
   
+  
+  ![alt text](web/app/static/img/capybara_smile.jpg)
+  
+  
+Thank for coming
+  
